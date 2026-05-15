@@ -18,6 +18,7 @@ import share from './share'
 import library from './library'
 import plugin from './plugin'
 import { Player } from './audioplayer'
+import { SimilarSongsPanel } from './recommendations'
 import customRoutes from './routes'
 import {
   libraryReducer,
@@ -35,6 +36,7 @@ import {
   shareDialogReducer,
   transcodingReducer,
 } from './reducers'
+import { recommendationReducer } from './reducers/recommendationReducer'
 import createAdminStore from './store/createAdminStore'
 import { i18nProvider } from './i18n'
 import config, { shareInfo } from './config'
@@ -74,6 +76,7 @@ const adminStore = createAdminStore({
     settings: settingsReducer,
     replayGain: replayGainReducer,
     transcoding: transcodingReducer,
+    recommendations: recommendationReducer,
   },
 })
 
@@ -158,6 +161,7 @@ const Admin = (props) => {
         <Resource name="insights" />,
         <Resource name="config" />,
         <Player />,
+        <SimilarSongsPanel />,
       ]}
     </RAAdmin>
   )

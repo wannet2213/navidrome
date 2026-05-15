@@ -34,6 +34,7 @@ import { keyMap } from '../hotkeys'
 import keyHandlers from './keyHandlers'
 import { calculateGain } from '../utils/calculateReplayGain'
 import { detectBrowserProfile, decisionService } from '../transcode'
+import useRecommendations from '../recommendations/useRecommendations'
 
 const Player = () => {
   const theme = useCurrentTheme()
@@ -132,6 +133,7 @@ const Player = () => {
     visible,
     enableCoverAnimation: config.enableCoverAnimation,
   })
+  const { recommendations: recState } = useRecommendations()
   const showNotifications = useSelector(
     (state) => state.settings.notifications || false,
   )
