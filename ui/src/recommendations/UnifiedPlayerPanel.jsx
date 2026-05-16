@@ -554,7 +554,7 @@ const UnifiedPlayerPanel = () => {
 
   const playerState = useSelector((state) => state.player)
   const recommendations = useSelector((state) => state.recommendations)
-  const queue = playerState?.queue || []
+  const queue = useMemo(() => playerState?.queue || [], [playerState?.queue])
   const playIndex = playerState?.savedPlayIndex ?? -1
   const { songs, autoplay, loading, visible } = recommendations || {}
   const isProcessingRef = useRef(false)

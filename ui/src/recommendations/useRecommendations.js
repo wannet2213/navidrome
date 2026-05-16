@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from 'react'
+import { useEffect, useRef, useCallback, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import subsonic from '../subsonic'
 import {
@@ -120,7 +120,20 @@ const useRecommendations = () => {
   const currentSongRef = useRef(null)
   const lastRefreshFetchedRef = useRef(0)
 
-  currentSongRef.current = currentTrack?.song || null
+  const trackId = currentTrack?.trackId
+  const isRadio = currentTrack?.isRadio
+  const currentSong = currentTrack?.song || null
+
+  currentSongRef.current = currentSong
+
+  const trackIdForRefresh = useMemo(
+    () => currentTrack?.trackId,
+    [currentTrack?.trackId],
+  )
+  const songForRefresh = useMemo(
+    () => currentTrack?.song || null,
+    [currentTrack?.song],
+  )
 
   const fetchRecommendationsForSong = useCallback(
     async (songId, song) => {
@@ -138,6 +151,7 @@ const useRecommendations = () => {
         const data = unwrap(response)
         songs = data.similarSongs2?.song || []
       } catch (e) {
+        // eslint-disable-next-line no-console
         console.warn('[Recommendations] getSimilarSongs2 failed:', e.message)
       }
 
@@ -151,6 +165,7 @@ const useRecommendations = () => {
           const topSongs = topData.topSongs?.song || []
           songs = [...songs, ...topSongs]
         } catch (e) {
+          // eslint-disable-next-line no-console
           console.warn('[Recommendations] getTopSongs failed:', e.message)
         }
       }
@@ -167,6 +182,7 @@ const useRecommendations = () => {
             songs = [...songs, ...randomSongs]
           }
         } catch (e) {
+          // eslint-disable-next-line no-console
           console.warn(
             '[Recommendations] getRandomSongs(genre) failed:',
             e.message,
@@ -181,6 +197,7 @@ const useRecommendations = () => {
           const randomSongs = data.randomSongs?.song || []
           songs = [...songs, ...randomSongs]
         } catch (e) {
+          // eslint-disable-next-line no-console
           console.warn('[Recommendations] getRandomSongs failed:', e.message)
         }
       }
@@ -195,6 +212,7 @@ const useRecommendations = () => {
             ...shuffleArray(starredSongs).slice(0, RANDOM_SONGS_COUNT),
           ]
         } catch (e) {
+          // eslint-disable-next-line no-console
           console.warn('[Recommendations] getStarred2 failed:', e.message)
         }
       }
@@ -205,8 +223,8 @@ const useRecommendations = () => {
 
       songs = songs.filter(validateSong)
 
-      const currentSong = currentSongRef.current
-      songs = sortByRelevance(songs, currentSong)
+      const current = currentSongRef.current
+      songs = sortByRelevance(songs, current)
 
       songs = shuffleTopPortion(songs)
 
@@ -214,22 +232,12 @@ const useRecommendations = () => {
 
       songs = songs.map(mapReplayGain)
 
-      if (songs.length === 0) {
-        console.warn(
-          '[Recommendations] No valid recommendations found for',
-          songId,
-        )
-      }
-
       dispatch(loadRecommendations(songs, songId))
     },
     [dispatch],
   )
 
   useEffect(() => {
-    const trackId = currentTrack?.trackId
-    const isRadio = currentTrack?.isRadio
-
     if (trackId && !isRadio && trackId !== prevTrackIdRef.current) {
       prevTrackIdRef.current = trackId
 
@@ -237,10 +245,9 @@ const useRecommendations = () => {
         clearTimeout(fetchTimeoutRef.current)
       }
 
-      const song = currentTrack?.song || null
+      const song = currentSong
       fetchTimeoutRef.current = setTimeout(() => {
-        fetchRecommendationsForSong(trackId, song).catch((err) => {
-          console.error('[Recommendations] Fetch failed:', err)
+        fetchRecommendationsForSong(trackId, song).catch(() => {
           dispatch(loadRecommendations([], trackId))
         })
       }, 1200)
@@ -255,11 +262,7 @@ const useRecommendations = () => {
         clearTimeout(fetchTimeoutRef.current)
       }
     }
-  }, [
-    currentTrack?.trackId,
-    currentTrack?.isRadio,
-    fetchRecommendationsForSong,
-  ])
+  }, [trackId, isRadio, currentSong, fetchRecommendationsForSong, dispatch])
 
   useEffect(() => {
     if (refreshCounter <= 0) return
@@ -267,18 +270,15 @@ const useRecommendations = () => {
 
     lastRefreshFetchedRef.current = refreshCounter
 
-    const trackId = currentTrack?.trackId
-    if (!trackId) return
+    if (!trackIdForRefresh) return
 
-    const song = currentTrack?.song || null
-    fetchRecommendationsForSong(trackId, song).catch((err) => {
-      console.error('[Recommendations] Refresh failed:', err)
-      dispatch(loadRecommendations([], trackId))
+    fetchRecommendationsForSong(trackIdForRefresh, songForRefresh).catch(() => {
+      dispatch(loadRecommendations([], trackIdForRefresh))
     })
   }, [
     refreshCounter,
-    currentTrack?.trackId,
-    currentTrack?.song,
+    trackIdForRefresh,
+    songForRefresh,
     fetchRecommendationsForSong,
     dispatch,
   ])

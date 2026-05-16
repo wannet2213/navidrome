@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { playNow } from '../actions'
 
@@ -10,8 +10,11 @@ const AutoplayManager = () => {
   const prevCurrentUuidRef = useRef(null)
   const isPlayingAutoplayRef = useRef(false)
 
-  const queue = playerState.queue || []
-  const current = playerState.current || {}
+  const queue = useMemo(() => playerState.queue || [], [playerState.queue])
+  const current = useMemo(
+    () => playerState.current || {},
+    [playerState.current],
+  )
   const { songs, autoplay } = recommendations || {}
 
   useEffect(() => {
