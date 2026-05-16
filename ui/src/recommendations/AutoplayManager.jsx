@@ -4,17 +4,15 @@ import { playNow } from '../actions'
 
 const AutoplayManager = () => {
   const dispatch = useDispatch()
-  const playerState = useSelector((state) => state.player)
+  const playerQueue = useSelector((state) => state.player.queue)
+  const playerCurrent = useSelector((state) => state.player.current)
   const recommendations = useSelector((state) => state.recommendations)
 
   const prevCurrentUuidRef = useRef(null)
   const isPlayingAutoplayRef = useRef(false)
 
-  const queue = useMemo(() => playerState.queue || [], [playerState.queue])
-  const current = useMemo(
-    () => playerState.current || {},
-    [playerState.current],
-  )
+  const queue = useMemo(() => playerQueue || [], [playerQueue])
+  const current = useMemo(() => playerCurrent || {}, [playerCurrent])
   const { songs, autoplay } = recommendations || {}
 
   useEffect(() => {
