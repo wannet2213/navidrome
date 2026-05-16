@@ -23,6 +23,7 @@ const initialState = {
   clear: false,
   volume: config.defaultUIVolume / 100,
   savedPlayIndex: 0,
+  sessionId: 0,
 }
 
 const pad = (value) => {
@@ -100,7 +101,11 @@ const mapToAudioLists = (item) => {
   }
 }
 
-const reduceClearQueue = () => ({ ...initialState, clear: true })
+const reduceClearQueue = (state) => ({
+  ...initialState,
+  clear: true,
+  sessionId: state.sessionId + 1,
+})
 
 const reducePlayTracks = (state, { data, id }) => {
   let playIndex = 0
@@ -115,6 +120,7 @@ const reducePlayTracks = (state, { data, id }) => {
     queue,
     playIndex,
     clear: true,
+    sessionId: state.sessionId + 1,
   }
 }
 
@@ -124,6 +130,7 @@ const reduceSetTrack = (state, { data }) => {
     queue: [mapToAudioLists(data)],
     playIndex: 0,
     clear: true,
+    sessionId: state.sessionId + 1,
   }
 }
 

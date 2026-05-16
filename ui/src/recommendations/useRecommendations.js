@@ -151,6 +151,7 @@ const useRecommendations = () => {
   const dispatch = useDispatch()
   const currentTrack = useSelector((state) => state.player.current)
   const playerQueue = useSelector((state) => state.player.queue)
+  const sessionId = useSelector((state) => state.player.sessionId || 0)
   const refreshCounter = useSelector(
     (state) => state.recommendations?.refreshCounter || 0,
   )
@@ -161,7 +162,7 @@ const useRecommendations = () => {
     (state.recommendations?.songs || []).map((s) => s.id),
   )
 
-  const prevTrackIdRef = useRef(null)
+  const prevSessionIdRef = useRef(null)
   const fetchTimeoutRef = useRef(null)
   const currentSongRef = useRef(null)
   const lastRefreshFetchedRef = useRef(0)
@@ -232,21 +233,22 @@ const useRecommendations = () => {
   )
 
   useEffect(() => {
-    if (trackId && !isRadio && trackId !== prevTrackIdRef.current) {
-      prevTrackIdRef.current = trackId
-      if (fetchTimeoutRef.current) clearTimeout(fetchTimeoutRef.current)
-      const song = currentSong
-      fetchTimeoutRef.current = setTimeout(() => {
-        fetchAndLoad(trackId, song)
-      }, INITIAL_DEBOUNCE_MS)
-    }
+    if (isRadio) return
     if (!trackId) {
-      prevTrackIdRef.current = null
+      prevSessionIdRef.current = null
+      return
     }
+    if (sessionId === prevSessionIdRef.current) return
+    prevSessionIdRef.current = sessionId
+    if (fetchTimeoutRef.current) clearTimeout(fetchTimeoutRef.current)
+    const song = currentSong
+    fetchTimeoutRef.current = setTimeout(() => {
+      fetchAndLoad(trackId, song)
+    }, INITIAL_DEBOUNCE_MS)
     return () => {
       if (fetchTimeoutRef.current) clearTimeout(fetchTimeoutRef.current)
     }
-  }, [trackId, isRadio, currentSong, fetchAndLoad])
+  }, [sessionId, trackId, isRadio, currentSong, fetchAndLoad])
 
   useEffect(() => {
     if (refreshCounter <= 0) return
