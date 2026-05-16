@@ -63,20 +63,23 @@ const validateSong = (song) => {
   return true
 }
 
-const processSongs = (songs, songId) => {
+const processSongs = (songs, songId, excludeIds) => {
   songs = deduplicateById(songs)
   songs = songs.filter((s) => s.id !== songId)
   songs = songs.filter(validateSong)
+  if (excludeIds) {
+    songs = songs.filter((s) => !excludeIds.has(s.id))
+  }
   songs = shuffleArray(songs)
   songs = songs.slice(0, POOL_SIZE)
   songs = songs.map(mapReplayGain)
   return songs
 }
 
-const processSongsForRefill = (songs, songId, existingIds) => {
+const processSongsForRefill = (songs, songId, excludeIds) => {
   songs = songs.filter((s) => s.id !== songId)
   songs = songs.filter(validateSong)
-  songs = songs.filter((s) => !existingIds.has(s.id))
+  songs = songs.filter((s) => !excludeIds.has(s.id))
   songs = shuffleArray(songs)
   return songs.map(mapReplayGain)
 }
@@ -147,14 +150,15 @@ const fetchSongBatch = async (songId, song) => {
 const useRecommendations = () => {
   const dispatch = useDispatch()
   const currentTrack = useSelector((state) => state.player.current)
+  const playerQueue = useSelector((state) => state.player.queue)
   const refreshCounter = useSelector(
     (state) => state.recommendations?.refreshCounter || 0,
   )
   const poolLength = useSelector(
     (state) => state.recommendations?.songs?.length || 0,
   )
-  const existingSongIds = useSelector(
-    (state) => new Set((state.recommendations?.songs || []).map((s) => s.id)),
+  const poolSongIds = useSelector((state) =>
+    (state.recommendations?.songs || []).map((s) => s.id),
   )
 
   const prevTrackIdRef = useRef(null)
@@ -179,28 +183,44 @@ const useRecommendations = () => {
     [currentTrack?.song],
   )
 
+  const queueIdSet = useMemo(() => {
+    const set = new Set()
+    const queue = playerQueue || []
+    queue.forEach((item) => {
+      const id = item.trackId || (item.song && item.song.id) || item.id
+      if (id) set.add(id)
+    })
+    return set
+  }, [playerQueue])
+
+  const excludeIds = useMemo(() => {
+    const set = new Set(queueIdSet)
+    poolSongIds.forEach((id) => set.add(id))
+    return set
+  }, [queueIdSet, poolSongIds])
+
   const fetchAndLoad = useCallback(
     async (songId, song) => {
       if (!songId) return
       dispatch(setRecommendationsLoading(true))
       try {
         const raw = await fetchSongBatch(songId, song)
-        const processed = processSongs(raw, songId)
+        const processed = processSongs(raw, songId, queueIdSet)
         dispatch(loadRecommendations(processed, songId))
       } catch {
         dispatch(loadRecommendations([], songId))
       }
     },
-    [dispatch],
+    [dispatch, queueIdSet],
   )
 
   const fetchAndAppend = useCallback(
-    async (songId, song, currentExistingIds, needed) => {
+    async (songId, song, currentExcludeIds, needed) => {
       if (!songId || isRefillingRef.current) return
       isRefillingRef.current = true
       try {
         const raw = await fetchSongBatch(songId, song)
-        const processed = processSongsForRefill(raw, songId, currentExistingIds)
+        const processed = processSongsForRefill(raw, songId, currentExcludeIds)
         dispatch(appendRecommendations(processed.slice(0, needed)))
       } catch {
         // silent
@@ -244,12 +264,12 @@ const useRecommendations = () => {
     const song = currentSong
     const needed = POOL_SIZE - poolLength
     refillTimeoutRef.current = setTimeout(() => {
-      fetchAndAppend(trackId, song, existingSongIds, needed)
+      fetchAndAppend(trackId, song, excludeIds, needed)
     }, REFILL_DEBOUNCE_MS)
     return () => {
       if (refillTimeoutRef.current) clearTimeout(refillTimeoutRef.current)
     }
-  }, [poolLength, trackId, currentSong, existingSongIds, fetchAndAppend])
+  }, [poolLength, trackId, currentSong, excludeIds, fetchAndAppend])
 
   return {
     fetchRecommendations: fetchAndLoad,
