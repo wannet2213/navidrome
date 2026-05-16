@@ -18,7 +18,7 @@ import share from './share'
 import library from './library'
 import plugin from './plugin'
 import { Player } from './audioplayer'
-import { SimilarSongsPanel } from './recommendations'
+import { UnifiedPlayerPanel, AutoplayManager } from './recommendations'
 import customRoutes from './routes'
 import {
   libraryReducer,
@@ -161,7 +161,8 @@ const Admin = (props) => {
         <Resource name="insights" />,
         <Resource name="config" />,
         <Player />,
-        <SimilarSongsPanel />,
+        <UnifiedPlayerPanel />,
+        <AutoplayManager />,
       ]}
     </RAAdmin>
   )

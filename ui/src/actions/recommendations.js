@@ -4,6 +4,7 @@ export const RECOMMENDATIONS_SET_AUTOPLAY = 'RECOMMENDATIONS_SET_AUTOPLAY'
 export const RECOMMENDATIONS_SET_LOADING = 'RECOMMENDATIONS_SET_LOADING'
 export const RECOMMENDATIONS_HIDE = 'RECOMMENDATIONS_HIDE'
 export const RECOMMENDATIONS_SHOW = 'RECOMMENDATIONS_SHOW'
+export const RECOMMENDATIONS_REFRESH = 'RECOMMENDATIONS_REFRESH'
 
 export const loadRecommendations = (songs, sourceTrackId) => ({
   type: RECOMMENDATIONS_LOAD,
@@ -30,4 +31,8 @@ export const hideRecommendations = () => ({
 
 export const showRecommendations = () => ({
   type: RECOMMENDATIONS_SHOW,
+})
+
+export const refreshRecommendations = () => ({
+  type: RECOMMENDATIONS_REFRESH,
 })

@@ -9,9 +9,12 @@ import Notification from './Notification'
 import useCurrentTheme from '../themes/useCurrentTheme'
 import { useSearchRefocus } from '../common'
 
-const useStyles = makeStyles({
-  root: { paddingBottom: (props) => (props.addPadding ? '80px' : 0) },
-})
+const useStyles = makeStyles((theme) => ({
+  root: {
+    paddingBottom: (props) => (props.addPadding ? '80px' : 0),
+    transition: 'padding-bottom 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+  },
+}))
 
 const Layout = (props) => {
   const theme = useCurrentTheme()

@@ -28,6 +28,7 @@ import {
 } from '../actions'
 import PlayerToolbar from './PlayerToolbar'
 import { sendNotification } from '../utils'
+import { showRecommendations, hideRecommendations } from '../actions/recommendations'
 import subsonic from '../subsonic'
 import locale from './locale'
 import { keyMap } from '../hotkeys'
@@ -42,6 +43,7 @@ const Player = () => {
   const playerTheme = theme.player?.theme || 'dark'
   const dataProvider = useDataProvider()
   const playerState = useSelector((state) => state.player)
+  const recommendationsVisible = useSelector((state) => state.recommendations?.visible)
   const dispatch = useDispatch()
   const [currentTrackId, setCurrentTrackId] = useState(null)
   const [heartbeatTrackId, setHeartbeatTrackId] = useState(null)
@@ -133,7 +135,7 @@ const Player = () => {
     visible,
     enableCoverAnimation: config.enableCoverAnimation,
   })
-  const { recommendations: recState } = useRecommendations()
+  useRecommendations()
   const showNotifications = useSelector(
     (state) => state.settings.notifications || false,
   )
@@ -437,6 +439,26 @@ const Player = () => {
       audioInstance.volume = 1
     }
   }, [isMobilePlayer, audioInstance])
+
+  useEffect(() => {
+    const interceptQueueButton = (e) => {
+      const queueBtn = e.target.closest(
+        '.react-jinke-music-player-main .audio-lists-btn',
+      )
+      if (queueBtn) {
+        e.preventDefault()
+        e.stopPropagation()
+        e.stopImmediatePropagation()
+        if (recommendationsVisible) {
+          dispatch(hideRecommendations())
+        } else {
+          dispatch(showRecommendations())
+        }
+      }
+    }
+    document.addEventListener('click', interceptQueueButton, true)
+    return () => document.removeEventListener('click', interceptQueueButton, true)
+  }, [dispatch, recommendationsVisible])
 
   return (
     <ThemeProvider theme={createMuiTheme(theme)}>

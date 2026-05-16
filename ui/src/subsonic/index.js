@@ -129,6 +129,18 @@ const getTopSongs = (artist, count = 50) => {
   return httpClient(url('getTopSongs', null, { artist, count }))
 }
 
+const getRandomSongs = (count = 50, genre, fromYear, toYear) => {
+  const options = { count }
+  if (genre) options.genre = genre
+  if (fromYear) options.fromYear = fromYear
+  if (toYear) options.toYear = toYear
+  return httpClient(url('getRandomSongs', null, options))
+}
+
+const getStarred2 = () => {
+  return httpClient(url('getStarred2'))
+}
+
 const streamUrl = (id, options) => {
   return baseUrl(
     url('stream', id, {
@@ -158,4 +170,6 @@ export default {
   getArtistInfo,
   getTopSongs,
   getSimilarSongs2,
+  getRandomSongs,
+  getStarred2,
 }

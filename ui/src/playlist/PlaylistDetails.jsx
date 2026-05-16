@@ -29,9 +29,12 @@ const useStyles = makeStyles(
         minWidth: '20em',
       },
       [theme.breakpoints.up('sm')]: {
-        padding: '1em',
+        padding: '1.5em',
         minWidth: '32em',
       },
+      background: 'linear-gradient(180deg, rgba(38, 38, 38, 0.5) 0%, transparent 100%)',
+      borderRadius: 0,
+      boxShadow: 'none',
     },
     cardContents: {
       display: 'flex',
@@ -45,19 +48,19 @@ const useStyles = makeStyles(
     },
     coverParent: {
       [theme.breakpoints.down('xs')]: {
-        height: '8em',
-        width: '8em',
-        minWidth: '8em',
-      },
-      [theme.breakpoints.up('sm')]: {
         height: '10em',
         width: '10em',
         minWidth: '10em',
       },
+      [theme.breakpoints.up('sm')]: {
+        height: '12em',
+        width: '12em',
+        minWidth: '12em',
+      },
       [theme.breakpoints.up('lg')]: {
-        height: '15em',
-        width: '15em',
-        minWidth: '15em',
+        height: '18em',
+        width: '18em',
+        minWidth: '18em',
       },
       backgroundColor: 'transparent',
       display: 'flex',
@@ -66,13 +69,18 @@ const useStyles = makeStyles(
       position: 'relative',
     },
     cover: {
-      objectFit: 'contain',
+      objectFit: 'cover',
       cursor: 'pointer',
       display: 'block',
       width: '100%',
       height: '100%',
       backgroundColor: 'transparent',
-      transition: 'opacity 0.3s ease-in-out',
+      borderRadius: 12,
+      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+      '&:hover': {
+        transform: 'scale(1.02)',
+        boxShadow: '0 12px 40px rgba(0, 0, 0, 0.5)',
+      },
     },
     coverLoading: {
       opacity: 0.5,
@@ -81,10 +89,17 @@ const useStyles = makeStyles(
       overflow: 'hidden',
       textOverflow: 'ellipsis',
       wordBreak: 'break-word',
+      fontSize: '2.25rem',
+      fontWeight: 700,
+      letterSpacing: '-0.03em',
+      color: 'rgba(255, 255, 255, 0.95)',
+      lineHeight: 1.1,
     },
     stats: {
-      marginTop: '1em',
+      marginTop: '0.75em',
       marginBottom: '0.5em',
+      fontSize: '0.875rem',
+      color: 'rgba(255, 255, 255, 0.45)',
     },
   }),
   {

@@ -9,6 +9,8 @@ export const PLAYER_SET_VOLUME = 'PLAYER_SET_VOLUME'
 export const PLAYER_SET_MODE = 'PLAYER_SET_MODE'
 export const TRANSCODING_SET_PROFILE = 'TRANSCODING_SET_PROFILE'
 export const PLAYER_REFRESH_QUEUE = 'PLAYER_REFRESH_QUEUE'
+export const PLAYER_PLAY_FROM_QUEUE = 'PLAYER_PLAY_FROM_QUEUE'
+export const PLAYER_PLAY_NOW = 'PLAYER_PLAY_NOW'
 
 export const setTrack = (data) => ({
   type: PLAYER_SET_TRACK,
@@ -113,4 +115,14 @@ export const setTranscodingProfile = (profile) => ({
 export const refreshQueue = (resolvedUrls) => ({
   type: PLAYER_REFRESH_QUEUE,
   data: resolvedUrls,
+})
+
+export const playFromQueue = (uuid) => ({
+  type: PLAYER_PLAY_FROM_QUEUE,
+  data: uuid,
+})
+
+export const playNow = (data, ids) => ({
+  type: PLAYER_PLAY_NOW,
+  data: { data, ids },
 })

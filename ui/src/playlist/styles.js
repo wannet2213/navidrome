@@ -7,23 +7,26 @@ export const useStyles = makeStyles((theme) => ({
       minWidth: '24em',
     },
     [theme.breakpoints.up('sm')]: {
-      padding: '1em',
+      padding: '1.5em',
       minWidth: '32em',
     },
+    background: 'linear-gradient(180deg, rgba(38, 38, 38, 0.5) 0%, transparent 100%)',
+    borderRadius: 0,
+    boxShadow: 'none',
   },
   albumCover: {
     display: 'inline-block',
     [theme.breakpoints.down('xs')]: {
-      height: '8em',
-      width: '8em',
-    },
-    [theme.breakpoints.up('sm')]: {
       height: '10em',
       width: '10em',
     },
+    [theme.breakpoints.up('sm')]: {
+      height: '12em',
+      width: '12em',
+    },
     [theme.breakpoints.up('lg')]: {
-      height: '15em',
-      width: '15em',
+      height: '18em',
+      width: '18em',
     },
   },
   albumDetails: {
@@ -43,5 +46,8 @@ export const useStyles = makeStyles((theme) => ({
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
+    fontWeight: 700,
+    letterSpacing: '-0.03em',
+    color: 'rgba(255, 255, 255, 0.95)',
   },
 }))

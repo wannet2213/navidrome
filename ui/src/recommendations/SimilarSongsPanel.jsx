@@ -6,8 +6,7 @@ import IconButton from '@material-ui/core/IconButton'
 import Tooltip from '@material-ui/core/Tooltip'
 import Typography from '@material-ui/core/Typography'
 import Fade from '@material-ui/core/Fade'
-import { MdPlayArrow, MdQueue, MdClose, MdAutorenew } from 'react-icons/md'
-import { IoMdHeartEmpty, IoMdHeart } from 'react-icons/io'
+import { MdPlayArrow, MdQueue, MdClose, MdSkipNext } from 'react-icons/md'
 import { LoveButton, useToggleLove } from '../common'
 import { addTracks, playTracks, playNext } from '../actions'
 import {
@@ -24,20 +23,25 @@ const useStyles = makeStyles((theme) => ({
     width: 380,
     maxWidth: 'calc(100vw - 32px)',
     maxHeight: 'calc(100vh - 160px)',
-    backgroundColor: theme.palette.background.paper,
-    borderRadius: 16,
-    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(148, 163, 184, 0.06)',
+    backgroundColor: 'rgba(23, 23, 23, 0.92)',
+    backdropFilter: 'saturate(180%) blur(40px)',
+    WebkitBackdropFilter: 'saturate(180%) blur(40px)',
+    borderRadius: 20,
+    boxShadow:
+      '0 16px 48px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.04)',
     zIndex: 1300,
     display: 'flex',
     flexDirection: 'column',
     overflow: 'hidden',
     transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+    animation: 'slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
     [theme.breakpoints.down('sm')]: {
       right: 8,
       left: 8,
       width: 'auto',
       bottom: 72,
       maxHeight: 'calc(100vh - 140px)',
+      borderRadius: 16,
     },
   },
   header: {
@@ -45,8 +49,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: '14px 16px',
-    borderBottom: '1px solid rgba(148, 163, 184, 0.08)',
-    backgroundColor: theme.palette.background.default,
+    borderBottom: '1px solid rgba(255, 255, 255, 0.06)',
   },
   headerLeft: {
     display: 'flex',
@@ -56,49 +59,60 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 0,
   },
   headerTitle: {
-    fontWeight: 600,
-    fontSize: '0.9375rem',
-    letterSpacing: '-0.01em',
-    color: theme.palette.text.primary,
+    fontWeight: 700,
+    fontSize: '1rem',
+    letterSpacing: '-0.02em',
+    color: 'rgba(255, 255, 255, 0.95)',
+  },
+  headerBadge: {
+    fontSize: '0.625rem',
+    fontWeight: 700,
+    color: '#fc3c44',
+    backgroundColor: 'rgba(252, 60, 68, 0.12)',
+    padding: '2px 8px',
+    borderRadius: 6,
+    textTransform: 'uppercase',
+    letterSpacing: '0.05em',
   },
   autoplayToggle: {
     display: 'flex',
     alignItems: 'center',
-    gap: 4,
+    gap: 6,
     cursor: 'pointer',
     padding: '4px 10px',
     borderRadius: 8,
     transition: 'background-color 0.15s ease',
     '&:hover': {
-      backgroundColor: 'rgba(99, 102, 241, 0.08)',
+      backgroundColor: 'rgba(252, 60, 68, 0.08)',
     },
   },
   autoplayLabel: {
-    fontSize: '0.6875rem',
-    fontWeight: 500,
-    color: theme.palette.text.secondary,
+    fontSize: '0.625rem',
+    fontWeight: 700,
+    color: (props) =>
+      props.autoplay ? theme.palette.primary.main : theme.palette.text.secondary,
     textTransform: 'uppercase',
-    letterSpacing: '0.04em',
+    letterSpacing: '0.05em',
   },
   autoplaySwitch: {
-    width: 32,
-    height: 18,
-    borderRadius: 9,
+    width: 28,
+    height: 16,
+    borderRadius: 8,
     backgroundColor: (props) =>
-      props.autoplay ? theme.palette.primary.main : theme.palette.action.disabled,
+      props.autoplay ? '#fc3c44' : 'rgba(115, 115, 115, 0.2)',
     position: 'relative',
     transition: 'background-color 0.2s ease',
     flexShrink: 0,
   },
   autoplayKnob: {
-    width: 14,
-    height: 14,
+    width: 12,
+    height: 12,
     borderRadius: '50%',
     backgroundColor: '#fff',
     position: 'absolute',
     top: 2,
-    left: (props) => (props.autoplay ? 16 : 2),
-    transition: 'left 0.2s ease',
+    left: (props) => (props.autoplay ? 14 : 2),
+    transition: 'left 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
     boxShadow: '0 1px 3px rgba(0,0,0,0.3)',
   },
   headerActions: {
@@ -107,58 +121,70 @@ const useStyles = makeStyles((theme) => ({
     gap: 2,
   },
   iconButton: {
-    padding: 6,
+    padding: 5,
     color: theme.palette.text.secondary,
+    borderRadius: 8,
     '&:hover': {
-      color: theme.palette.text.primary,
+      color: 'rgba(255, 255, 255, 0.95)',
+      backgroundColor: 'rgba(255, 255, 255, 0.06)',
     },
   },
   listContainer: {
     overflowY: 'auto',
     overflowX: 'hidden',
     flex: 1,
-    padding: '8px 0',
+    padding: '6px 0',
     '&::-webkit-scrollbar': {
-      width: 4,
+      width: 3,
     },
     '&::-webkit-scrollbar-track': {
       background: 'transparent',
     },
     '&::-webkit-scrollbar-thumb': {
-      background: theme.palette.action.disabled,
+      background: 'rgba(115, 115, 115, 0.2)',
       borderRadius: 2,
     },
   },
   songItem: {
     display: 'flex',
     alignItems: 'center',
-    padding: '8px 14px',
-    gap: 12,
+    padding: '8px 12px',
+    gap: 10,
     cursor: 'pointer',
-    transition: 'background-color 0.12s ease',
+    transition: 'background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1)',
+    borderLeft: '2px solid transparent',
     '&:hover': {
-      backgroundColor: 'rgba(99, 102, 241, 0.06)',
+      backgroundColor: 'rgba(252, 60, 68, 0.06)',
+      borderLeftColor: '#fc3c44',
     },
     '&:hover $songActions': {
       opacity: 1,
     },
   },
+  songIndex: {
+    fontSize: '0.6875rem',
+    fontWeight: 500,
+    color: theme.palette.text.secondary,
+    width: 18,
+    textAlign: 'center',
+    flexShrink: 0,
+  },
   coverArt: {
-    width: 44,
-    height: 44,
+    width: 40,
+    height: 40,
     borderRadius: 8,
     objectFit: 'cover',
     flexShrink: 0,
-    backgroundColor: theme.palette.action.hover,
+    backgroundColor: 'rgba(115, 115, 115, 0.06)',
   },
   songInfo: {
     flex: 1,
     minWidth: 0,
   },
   songTitle: {
-    fontSize: '0.8125rem',
+    fontSize: '0.875rem',
     fontWeight: 500,
-    color: theme.palette.text.primary,
+    color: 'rgba(255, 255, 255, 0.9)',
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
@@ -175,7 +201,7 @@ const useStyles = makeStyles((theme) => ({
   songActions: {
     display: 'flex',
     alignItems: 'center',
-    gap: 1,
+    gap: 0,
     opacity: 0,
     transition: 'opacity 0.15s ease',
     flexShrink: 0,
@@ -183,9 +209,18 @@ const useStyles = makeStyles((theme) => ({
   actionButton: {
     padding: 4,
     color: theme.palette.text.secondary,
+    borderRadius: 6,
     '&:hover': {
-      color: theme.palette.text.primary,
-      backgroundColor: 'rgba(99, 102, 241, 0.1)',
+      color: 'rgba(255, 255, 255, 0.95)',
+      backgroundColor: 'rgba(252, 60, 68, 0.08)',
+    },
+  },
+  playNextButton: {
+    padding: 4,
+    color: '#fc3c44',
+    borderRadius: 6,
+    '&:hover': {
+      backgroundColor: 'rgba(252, 60, 68, 0.12)',
     },
   },
   emptyState: {
@@ -194,17 +229,21 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     padding: '32px 24px',
-    gap: 12,
+    gap: 10,
   },
   emptyIcon: {
-    fontSize: 32,
+    fontSize: 28,
     color: theme.palette.text.secondary,
-    opacity: 0.5,
+    opacity: 0.4,
+    animation: '$spin 2s linear infinite',
+  },
+  '@keyframes spin': {
+    from: { transform: 'rotate(0deg)' },
+    to: { transform: 'rotate(360deg)' },
   },
   emptyText: {
     fontSize: '0.8125rem',
     color: theme.palette.text.secondary,
-    textAlign: 'center',
   },
 }))
 
@@ -248,6 +287,7 @@ const RecommendationItem = ({ song, index }) => {
 
   return (
     <div className={classes.songItem} onClick={handlePlay}>
+      <span className={classes.songIndex}>{index + 1}</span>
       <img
         className={classes.coverArt}
         src={coverUrl}
@@ -262,22 +302,22 @@ const RecommendationItem = ({ song, index }) => {
         </div>
       </div>
       <div className={classes.songActions}>
-        <Tooltip title={translate('resources.song.actions.addToQueue')} enterDelay={300}>
+        <Tooltip title={translate('resources.song.actions.playNext')} enterDelay={400}>
+          <IconButton
+            size="small"
+            className={classes.playNextButton}
+            onClick={handlePlayNext}
+          >
+            <MdSkipNext size={16} />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title={translate('resources.song.actions.addToQueue')} enterDelay={400}>
           <IconButton
             size="small"
             className={classes.actionButton}
             onClick={handleAddToQueue}
           >
-            <MdQueue size={16} />
-          </IconButton>
-        </Tooltip>
-        <Tooltip title={translate('resources.song.actions.playNext')} enterDelay={300}>
-          <IconButton
-            size="small"
-            className={classes.actionButton}
-            onClick={handlePlayNext}
-          >
-            <MdAutorenew size={14} />
+            <MdQueue size={15} />
           </IconButton>
         </Tooltip>
         <LoveButton
@@ -298,7 +338,6 @@ const SimilarSongsPanel = () => {
   const recommendations = useSelector((state) => state.recommendations)
   const { songs, autoplay, loading, visible } = recommendations || {}
   const classes = useStyles({ autoplay })
-
   const panelRef = useRef(null)
 
   useEffect(() => {
@@ -336,37 +375,49 @@ const SimilarSongsPanel = () => {
                 _: 'Up Next',
               })}
             </Typography>
+            <span className={classes.headerBadge}>Auto</span>
           </div>
           <div
             className={classes.autoplayToggle}
             onClick={handleToggleAutoplay}
+            role="switch"
+            aria-checked={autoplay}
+            tabIndex={0}
           >
             <span className={classes.autoplayLabel}>
-              {autoplay ? 'Auto' : 'Manual'}
+              {autoplay ? 'ON' : 'OFF'}
             </span>
             <div className={classes.autoplaySwitch}>
               <div className={classes.autoplayKnob} />
             </div>
           </div>
           <div className={classes.headerActions}>
-            <IconButton size="small" className={classes.iconButton} onClick={handleClose}>
-              <MdClose size={18} />
+            <IconButton
+              size="small"
+              className={classes.iconButton}
+              onClick={handleClose}
+            >
+              <MdClose size={16} />
             </IconButton>
           </div>
         </div>
         <div className={classes.listContainer}>
           {loading && (
             <div className={classes.emptyState}>
-              <MdAutorenew size={28} className={classes.emptyIcon} />
+              <MdSkipNext size={24} className={classes.emptyIcon} />
               <Typography className={classes.emptyText}>
-                Loading recommendations...
+                Finding similar songs...
               </Typography>
             </div>
           )}
           {!loading &&
             songs &&
             songs.map((song, idx) => (
-              <RecommendationItem key={song.id || idx} song={song} index={idx} />
+              <RecommendationItem
+                key={song.id || idx}
+                song={song}
+                index={idx}
+              />
             ))}
         </div>
       </div>

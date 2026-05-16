@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(1),
     marginBottom: theme.spacing(1),
     transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
+      easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
       duration: theme.transitions.duration.leavingScreen,
     }),
     paddingBottom: (props) => (props.addPadding ? '80px' : '20px'),
@@ -29,8 +29,8 @@ const useStyles = makeStyles((theme) => ({
     width: 55,
   },
   active: {
-    color: theme.palette.text.primary,
-    fontWeight: 'bold',
+    color: '#fc3c44',
+    fontWeight: 700,
   },
 }))
 

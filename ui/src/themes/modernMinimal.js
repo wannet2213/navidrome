@@ -1,84 +1,105 @@
 import stylesheet from './modernMinimal.css.js'
 
-const indigo = {
-  50: '#eef2ff',
-  100: '#e0e7ff',
-  200: '#c7d2fe',
-  300: '#a5b4fc',
-  400: '#818cf8',
-  500: '#6366f1',
-  600: '#4f46e5',
-  700: '#4338ca',
-  800: '#3730a3',
-  900: '#312e81',
+const rose = {
+  50: '#fff1f2',
+  100: '#ffe4e6',
+  200: '#fecdd3',
+  300: '#fda4af',
+  400: '#fb7185',
+  500: '#fc3c44',
+  600: '#e11d48',
+  700: '#be123c',
+  800: '#9f1239',
+  900: '#881337',
 }
 
-const slate = {
-  50: '#f8fafc',
-  100: '#f1f5f9',
-  200: '#e2e8f0',
-  300: '#cbd5e1',
-  400: '#94a3b8',
-  500: '#64748b',
-  600: '#475569',
-  700: '#334155',
-  800: '#1e293b',
-  900: '#0f172a',
-  950: '#020617',
+const gray = {
+  50: '#fafafa',
+  100: '#f5f5f5',
+  200: '#e5e5e5',
+  300: '#d4d4d4',
+  400: '#a3a3a3',
+  500: '#737373',
+  600: '#525252',
+  700: '#404040',
+  800: '#262626',
+  850: '#1c1c1e',
+  900: '#171717',
+  950: '#0a0a0a',
 }
 
 export default {
   themeName: 'Modern Minimal',
   typography: {
     fontFamily:
-      "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif",
+      "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Inter', 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif",
     h4: {
-      fontWeight: 600,
-      letterSpacing: '-0.02em',
+      fontWeight: 700,
+      letterSpacing: '-0.03em',
     },
     h5: {
-      fontWeight: 600,
-      letterSpacing: '-0.01em',
+      fontWeight: 700,
+      letterSpacing: '-0.025em',
     },
     h6: {
       fontWeight: 600,
-      letterSpacing: '-0.01em',
+      letterSpacing: '-0.02em',
     },
     subtitle1: {
       fontWeight: 500,
+      letterSpacing: '-0.01em',
+    },
+    subtitle2: {
+      fontWeight: 600,
+      letterSpacing: '0.01em',
+      textTransform: 'uppercase',
+      fontSize: '0.6875rem',
     },
     body1: {
-      fontSize: '0.875rem',
-      lineHeight: 1.6,
+      fontSize: '0.9375rem',
+      lineHeight: 1.5,
+      fontWeight: 400,
     },
     body2: {
       fontSize: '0.8125rem',
       lineHeight: 1.5,
+      fontWeight: 400,
+    },
+    button: {
+      textTransform: 'none',
+      fontWeight: 600,
+      letterSpacing: '-0.01em',
     },
     caption: {
       fontSize: '0.75rem',
-      color: slate[400],
+      color: gray[500],
+      letterSpacing: '0.01em',
     },
   },
   palette: {
     primary: {
-      light: indigo[300],
-      main: indigo[500],
-      dark: indigo[700],
+      light: rose[300],
+      main: rose[500],
+      dark: rose[700],
+      contrastText: '#fff',
     },
     secondary: {
-      main: slate[300],
-      contrastText: slate[900],
+      main: gray[400],
+      contrastText: '#fff',
     },
     background: {
-      default: slate[950],
-      paper: slate[900],
+      default: gray[950],
+      paper: gray[900],
     },
     text: {
-      primary: slate[100],
-      secondary: slate[400],
+      primary: 'rgba(255, 255, 255, 0.95)',
+      secondary: gray[500],
     },
-    divider: 'rgba(148, 163, 184, 0.08)',
+    divider: 'rgba(255, 255, 255, 0.06)',
+    action: {
+      hover: 'rgba(255, 255, 255, 0.05)',
+      selected: 'rgba(252, 60, 68, 0.12)',
+    },
     type: 'dark',
   },
   shape: {
@@ -89,197 +110,251 @@ export default {
       '@global': {
         '*': {
           scrollbarWidth: 'thin',
-          scrollbarColor: `${slate[600]} transparent`,
+          scrollbarColor: `${gray[700]} transparent`,
+        },
+        body: {
+          overflow: 'hidden',
         },
       },
     },
     MuiPaper: {
       root: {
         backgroundImage: 'none',
+        backgroundColor: gray[900],
       },
       rounded: {
         borderRadius: 16,
       },
       elevation1: {
-        boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1)',
+        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.3)',
       },
       elevation2: {
-        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1)',
+        boxShadow: '0 4px 16px rgba(0, 0, 0, 0.4)',
       },
     },
     MuiButton: {
       root: {
-        borderRadius: 10,
+        borderRadius: 100,
         textTransform: 'none',
-        fontWeight: 500,
-        padding: '8px 20px',
+        fontWeight: 600,
+        padding: '10px 24px',
+        fontSize: '0.9375rem',
+        transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
       },
       contained: {
         boxShadow: 'none',
         '&:hover': {
-          boxShadow: '0 4px 12px rgba(99, 102, 241, 0.25)',
+          boxShadow: '0 4px 20px rgba(252, 60, 68, 0.3)',
+          transform: 'scale(1.02)',
+        },
+        '&:active': {
+          transform: 'scale(0.98)',
         },
       },
       outlined: {
-        borderWidth: 1,
-        borderColor: slate[700],
+        borderWidth: 1.5,
+        borderColor: gray[700],
+        color: 'rgba(255, 255, 255, 0.85)',
         '&:hover': {
-          borderWidth: 1,
-          borderColor: indigo[500],
-          backgroundColor: 'rgba(99, 102, 241, 0.08)',
+          borderWidth: 1.5,
+          borderColor: 'rgba(255, 255, 255, 0.3)',
+          backgroundColor: 'rgba(255, 255, 255, 0.04)',
+        },
+      },
+      text: {
+        '&:hover': {
+          backgroundColor: 'rgba(255, 255, 255, 0.06)',
         },
       },
       textPrimary: {
-        color: indigo[400],
+        color: rose[500],
+        '&:hover': {
+          backgroundColor: 'rgba(252, 60, 68, 0.1)',
+        },
       },
     },
     MuiIconButton: {
       root: {
-        borderRadius: 10,
-        padding: 8,
-        transition: 'all 0.2s ease-in-out',
+        borderRadius: '50%',
+        padding: 10,
+        transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
         '&:hover': {
-          backgroundColor: 'rgba(99, 102, 241, 0.12)',
+          backgroundColor: 'rgba(255, 255, 255, 0.08)',
+          transform: 'scale(1.05)',
+        },
+        '&:active': {
+          transform: 'scale(0.95)',
         },
       },
     },
     MuiAppBar: {
       root: {
         boxShadow: 'none',
-        borderBottom: `1px solid rgba(148, 163, 184, 0.06)`,
+        borderBottom: 'none',
       },
       colorDefault: {
-        backgroundColor: 'rgba(15, 23, 42, 0.85)',
-        backdropFilter: 'blur(20px)',
-        WebkitBackdropFilter: 'blur(20px)',
+        backgroundColor: 'rgba(10, 10, 10, 0.72)',
+        backdropFilter: 'saturate(180%) blur(40px)',
+        WebkitBackdropFilter: 'saturate(180%) blur(40px)',
       },
     },
     MuiDrawer: {
       root: {
-        borderRight: `1px solid rgba(148, 163, 184, 0.06)`,
+        borderRight: 'none',
       },
       paper: {
-        backgroundColor: slate[950],
+        backgroundColor: 'rgba(10, 10, 10, 0.88)',
+        backdropFilter: 'saturate(180%) blur(40px)',
+        WebkitBackdropFilter: 'saturate(180%) blur(40px)',
+        borderRight: 'none',
+      },
+      paperAnchorDockedLeft: {
         borderRight: 'none',
       },
     },
     MuiListItem: {
       root: {
         borderRadius: 10,
-        margin: '2px 8px',
-        paddingLeft: 12,
-        paddingRight: 12,
+        margin: '1px 10px',
+        paddingLeft: 14,
+        paddingRight: 14,
+        transition: 'all 0.15s cubic-bezier(0.4, 0, 0.2, 1)',
         '&$selected': {
-          backgroundColor: 'rgba(99, 102, 241, 0.12)',
+          backgroundColor: 'rgba(252, 60, 68, 0.12)',
           '&:hover': {
-            backgroundColor: 'rgba(99, 102, 241, 0.18)',
+            backgroundColor: 'rgba(252, 60, 68, 0.18)',
+          },
+          '& .MuiListItemIcon-root': {
+            color: rose[500],
+          },
+          '& .MuiListItemText-primary': {
+            color: rose[500],
+            fontWeight: 600,
           },
         },
+      },
+    },
+    MuiListItemIcon: {
+      root: {
+        color: gray[500],
+        minWidth: 40,
+        '& svg': {
+          fontSize: 20,
+        },
+      },
+    },
+    MuiListItemText: {
+      primary: {
+        fontSize: '0.9375rem',
+        fontWeight: 400,
+        color: 'rgba(255, 255, 255, 0.85)',
       },
     },
     MuiMenuItem: {
       root: {
         borderRadius: 8,
-        margin: '2px 6px',
-        fontSize: '0.875rem',
+        margin: '1px 8px',
+        fontSize: '0.9375rem',
+        padding: '10px 14px',
         '&:hover': {
-          backgroundColor: 'rgba(99, 102, 241, 0.08)',
+          backgroundColor: 'rgba(255, 255, 255, 0.06)',
         },
       },
     },
     MuiTableCell: {
       root: {
-        borderBottom: `1px solid rgba(148, 163, 184, 0.06)`,
-        padding: '12px 16px',
-        color: slate[300],
-        fontSize: '0.8125rem',
+        borderBottom: `1px solid rgba(255, 255, 255, 0.04)`,
+        padding: '14px 16px',
+        color: 'rgba(255, 255, 255, 0.8)',
+        fontSize: '0.9375rem',
       },
       head: {
-        borderBottom: `1px solid rgba(148, 163, 184, 0.1)`,
-        color: slate[500],
-        fontSize: '0.6875rem',
+        borderBottom: `1px solid rgba(255, 255, 255, 0.06)`,
+        color: gray[500],
+        fontSize: '0.75rem',
         fontWeight: 600,
         textTransform: 'uppercase',
-        letterSpacing: '0.08em',
+        letterSpacing: '0.06em',
       },
     },
     MuiTableRow: {
       root: {
-        transition: 'background-color 0.15s ease',
+        transition: 'background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1)',
         '&:hover': {
-          backgroundColor: 'rgba(99, 102, 241, 0.04) !important',
+          backgroundColor: 'rgba(255, 255, 255, 0.03) !important',
         },
       },
     },
     MuiDivider: {
       root: {
-        backgroundColor: 'rgba(148, 163, 184, 0.08)',
+        backgroundColor: 'rgba(255, 255, 255, 0.06)',
         margin: '8px 0',
       },
     },
     MuiChip: {
       root: {
-        borderRadius: 8,
+        borderRadius: 100,
         fontWeight: 500,
+        fontSize: '0.8125rem',
       },
     },
     MuiTextField: {
       root: {
         '& .MuiOutlinedInput-root': {
-          borderRadius: 10,
+          borderRadius: 12,
           '& fieldset': {
-            borderColor: slate[700],
+            borderColor: gray[800],
+            transition: 'border-color 0.2s ease',
           },
           '&:hover fieldset': {
-            borderColor: slate[500],
+            borderColor: gray[600],
           },
           '&.Mui-focused fieldset': {
-            borderColor: indigo[500],
+            borderColor: rose[500],
           },
         },
       },
     },
     MuiFilledInput: {
       root: {
-        borderRadius: '10px 10px 0 0',
-        backgroundColor: slate[800],
+        borderRadius: '12px 12px 0 0',
+        backgroundColor: gray[850],
         '&:hover': {
-          backgroundColor: slate[800],
+          backgroundColor: gray[800],
         },
         '&$focused': {
-          backgroundColor: slate[800],
+          backgroundColor: gray[800],
         },
       },
     },
     MuiFab: {
       root: {
-        boxShadow: '0 4px 14px rgba(0, 0, 0, 0.25)',
-        borderRadius: 14,
+        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.4)',
+        borderRadius: 16,
       },
     },
     MuiCard: {
       root: {
         borderRadius: 16,
-        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.12)',
+        boxShadow: '0 2px 12px rgba(0, 0, 0, 0.3)',
         overflow: 'hidden',
+        backgroundColor: gray[850],
       },
     },
     MuiDialog: {
       paper: {
-        borderRadius: 16,
+        borderRadius: 20,
+        backgroundColor: gray[900],
       },
     },
     MuiTooltip: {
       tooltip: {
         borderRadius: 8,
-        fontSize: '0.75rem',
-        backgroundColor: slate[800],
-        color: slate[100],
-      },
-    },
-    MuiFormControlLabel: {
-      root: {
-        borderRadius: 8,
+        fontSize: '0.8125rem',
+        fontWeight: 500,
+        backgroundColor: gray[800],
+        color: 'rgba(255, 255, 255, 0.9)',
+        padding: '6px 12px',
       },
     },
     MuiSwitch: {
@@ -288,79 +363,89 @@ export default {
       },
       switchBase: {
         '&$checked': {
-          color: indigo[500],
+          color: rose[500],
         },
       },
       colorPrimary: {
         '&$checked': {
-          color: indigo[500],
+          color: rose[500],
         },
       },
       track: {
-        borderRadius: 12,
-        backgroundColor: slate[600],
+        borderRadius: 100,
+        backgroundColor: gray[700],
+        '$checked$data-checked + &': {
+          backgroundColor: 'rgba(252, 60, 68, 0.5)',
+        },
       },
     },
     MuiSlider: {
       root: {
-        color: indigo[500],
+        color: rose[500],
       },
       thumb: {
-        boxShadow: '0 0 0 4px rgba(99, 102, 241, 0.2)',
-      },
-    },
-    MuiFormGroup: {
-      root: {
-        color: indigo[400],
+        boxShadow: '0 0 0 4px rgba(252, 60, 68, 0.15)',
+        transition: 'box-shadow 0.2s ease',
+        '&:hover': {
+          boxShadow: '0 0 0 6px rgba(252, 60, 68, 0.2)',
+        },
       },
     },
     RaLayout: {
       root: {
-        backgroundColor: slate[950],
+        backgroundColor: gray[950],
       },
       content: {
-        padding: '24px !important',
-        backgroundColor: slate[950],
+        padding: '28px 32px !important',
+        backgroundColor: gray[950],
       },
     },
     RaSidebar: {
       root: {
         height: 'initial',
-        backgroundColor: slate[950],
+        backgroundColor: 'transparent',
       },
       drawerPaper: {
-        backgroundColor: slate[950],
+        backgroundColor: 'transparent',
       },
     },
     RaList: {
       content: {
         backgroundColor: 'transparent',
       },
+      main: {
+        backgroundColor: 'transparent',
+      },
     },
     RaListToolbar: {
       toolbar: {
-        padding: '0 8px !important',
-        minHeight: 48,
+        padding: '0 4px !important',
+        minHeight: 52,
       },
     },
     RaSearchInput: {
       input: {
         '& .MuiInputBase-root': {
-          borderRadius: '12px !important',
-          backgroundColor: slate[800],
-          border: `1px solid ${slate[700]}`,
-          color: slate[100],
+          borderRadius: '10px !important',
+          backgroundColor: gray[850],
+          border: `1px solid ${gray[800]}`,
+          color: 'rgba(255, 255, 255, 0.9)',
+          transition: 'all 0.2s ease',
           '& fieldset': {
             borderColor: 'transparent',
           },
-          '&:hover fieldset': {
-            borderColor: slate[600],
+          '&:hover': {
+            borderColor: gray[600],
+          },
+          '&.Mui-focused': {
+            borderColor: rose[500],
+            backgroundColor: gray[800],
           },
           '&.Mui-focused fieldset': {
-            borderColor: indigo[500],
+            borderColor: rose[500],
           },
           '& svg': {
-            color: `${slate[400]} !important`,
+            color: `${gray[500]} !important`,
           },
         },
       },
@@ -368,90 +453,101 @@ export default {
     RaPaginationActions: {
       button: {
         backgroundColor: 'transparent',
-        borderRadius: 10,
-        margin: '0 2px',
+        borderRadius: 100,
+        margin: '0 3px',
         minWidth: 36,
-        border: `1px solid ${slate[700]}`,
-        color: slate[300],
+        height: 36,
+        border: `1px solid ${gray[800]}`,
+        color: 'rgba(255, 255, 255, 0.7)',
+        transition: 'all 0.15s ease',
         '&:hover': {
-          backgroundColor: 'rgba(99, 102, 241, 0.08)',
-          borderColor: indigo[500],
+          backgroundColor: 'rgba(255, 255, 255, 0.05)',
+          borderColor: gray[600],
         },
       },
       currentPageButton: {
-        backgroundColor: indigo[500],
+        backgroundColor: rose[500],
         color: '#fff',
-        borderColor: indigo[500],
+        borderColor: rose[500],
+        fontWeight: 600,
         '&:hover': {
-          backgroundColor: indigo[600],
+          backgroundColor: rose[600],
         },
       },
     },
     NDAlbumGridView: {
       albumContainer: {
-        backgroundColor: slate[900],
-        borderRadius: 14,
-        padding: 16,
-        transition: 'all 0.2s ease',
+        backgroundColor: 'transparent',
+        borderRadius: 0,
+        padding: '0 0 16px 0',
+        transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
         cursor: 'pointer',
         '&:hover': {
-          backgroundColor: slate[800],
-          transform: 'translateY(-2px)',
+          backgroundColor: 'transparent',
+          transform: 'scale(1.03)',
         },
       },
       albumName: {
-        marginTop: 10,
+        marginTop: 8,
         fontWeight: 600,
-        fontSize: '0.875rem',
-        color: slate[100],
+        fontSize: '0.9375rem',
+        color: 'rgba(255, 255, 255, 0.9)',
         letterSpacing: '-0.01em',
         overflow: 'hidden',
         textOverflow: 'ellipsis',
         whiteSpace: 'nowrap',
       },
       albumSubtitle: {
-        color: slate[500],
+        color: gray[500],
         fontSize: '0.8125rem',
+        fontWeight: 400,
         marginTop: 2,
       },
       albumPlayButton: {
-        backgroundColor: indigo[500],
+        backgroundColor: 'rgba(252, 60, 68, 0.9)',
         borderRadius: '50%',
-        boxShadow: '0 6px 16px rgba(99, 102, 241, 0.35)',
-        transition: 'all 0.2s ease',
+        boxShadow: '0 8px 24px rgba(252, 60, 68, 0.4)',
+        transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
         opacity: 0,
+        transform: 'translateY(8px)',
+        backdropFilter: 'blur(10px)',
         '&:hover': {
-          backgroundColor: `${indigo[400]} !important`,
-          transform: 'scale(1.08)',
+          backgroundColor: `${rose[400]} !important`,
+          transform: 'scale(1.1) translateY(4px)',
+          boxShadow: '0 12px 32px rgba(252, 60, 68, 0.5)',
         },
       },
       albumContainerHover: {
         '&:hover $albumPlayButton': {
           opacity: 1,
+          transform: 'translateY(0)',
         },
       },
     },
     NDAlbumDetails: {
       root: {
-        background: `linear-gradient(180deg, ${slate[800]} 0%, transparent 100%)`,
-        borderRadius: 16,
+        background: `linear-gradient(180deg, ${gray[800]} 0%, transparent 100%)`,
+        borderRadius: 0,
         boxShadow: 'none',
-        padding: 24,
+        padding: '32px 24px',
       },
       recordName: {
-        fontSize: '2rem',
+        fontSize: '2.5rem',
         fontWeight: 700,
-        letterSpacing: '-0.03em',
-        color: slate[100],
+        letterSpacing: '-0.04em',
+        color: 'rgba(255, 255, 255, 0.95)',
+        lineHeight: 1.1,
       },
       recordArtist: {
-        fontSize: '0.9375rem',
+        fontSize: '1.0625rem',
         fontWeight: 500,
-        color: indigo[400],
+        color: rose[500],
+        marginTop: 6,
       },
       recordMeta: {
-        fontSize: '0.8125rem',
-        color: slate[400],
+        fontSize: '0.875rem',
+        color: gray[500],
+        marginTop: 4,
       },
     },
     NDArtistShow: {
@@ -462,67 +558,71 @@ export default {
     },
     NDLogin: {
       main: {
-        boxShadow: `inset 0 0 0 2000px rgba(2, 6, 23, 0.85)`,
+        boxShadow: `inset 0 0 0 2000px rgba(10, 10, 10, 0.88)`,
       },
       systemNameLink: {
-        color: indigo[400],
+        color: rose[500],
       },
       welcome: {
-        color: slate[100],
+        color: 'rgba(255, 255, 255, 0.9)',
         fontWeight: 300,
       },
       card: {
-        minWidth: 340,
-        backgroundColor: 'rgba(30, 41, 59, 0.9)',
-        backdropFilter: 'blur(24px)',
-        WebkitBackdropFilter: 'blur(24px)',
-        borderRadius: 20,
-        border: `1px solid ${slate[700]}`,
-        boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
+        minWidth: 360,
+        backgroundColor: 'rgba(28, 28, 30, 0.92)',
+        backdropFilter: 'saturate(180%) blur(40px)',
+        WebkitBackdropFilter: 'saturate(180%) blur(40px)',
+        borderRadius: 24,
+        border: '1px solid rgba(255, 255, 255, 0.06)',
+        boxShadow: '0 30px 60px -12px rgba(0, 0, 0, 0.6)',
       },
       avatar: {
         marginBottom: 8,
       },
       button: {
-        borderRadius: 12,
-        boxShadow: '0 4px 14px rgba(99, 102, 241, 0.3)',
+        borderRadius: 100,
+        boxShadow: '0 4px 16px rgba(252, 60, 68, 0.3)',
         textTransform: 'none',
         fontWeight: 600,
+        fontSize: '1rem',
+        padding: '12px 32px',
       },
     },
     NDMobileArtistDetails: {
       bgContainer: {
-        background: `linear-gradient(to bottom, rgba(30, 41, 59, 0.85), ${slate[950]})`,
+        background: `linear-gradient(to bottom, rgba(28, 28, 30, 0.88), ${gray[950]})`,
       },
     },
     NDAudioPlayer: {
       audioTitle: {
-        color: slate[100],
+        color: 'rgba(255, 255, 255, 0.9)',
       },
       songTitle: {
         fontWeight: 600,
-        fontSize: '0.875rem',
+        fontSize: '0.9375rem',
+        letterSpacing: '-0.01em',
       },
       songInfo: {
-        color: slate[400],
-        fontSize: '0.75rem',
+        color: gray[500],
+        fontSize: '0.8125rem',
       },
     },
     NDPlaylistDetails: {
       container: {
-        background: `linear-gradient(180deg, ${slate[800]} 0%, transparent 100%)`,
-        borderRadius: 16,
+        background: `linear-gradient(180deg, ${gray[800]} 0%, transparent 100%)`,
+        borderRadius: 0,
         boxShadow: 'none',
-        paddingTop: '2rem !important',
+        paddingTop: '2.5rem !important',
       },
       title: {
         fontWeight: 700,
-        letterSpacing: '-0.02em',
-        color: slate[100],
+        letterSpacing: '-0.03em',
+        fontSize: '2.25rem',
+        color: 'rgba(255, 255, 255, 0.95)',
       },
       details: {
-        fontSize: '0.8125rem',
-        color: slate[400],
+        fontSize: '0.875rem',
+        color: gray[500],
       },
     },
   },

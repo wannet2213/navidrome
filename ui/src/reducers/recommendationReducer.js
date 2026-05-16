@@ -5,6 +5,7 @@ import {
   RECOMMENDATIONS_SET_LOADING,
   RECOMMENDATIONS_HIDE,
   RECOMMENDATIONS_SHOW,
+  RECOMMENDATIONS_REFRESH,
 } from '../actions/recommendations'
 
 const initialState = {
@@ -13,6 +14,7 @@ const initialState = {
   autoplay: true,
   loading: false,
   visible: false,
+  refreshCounter: 0,
 }
 
 export const recommendationReducer = (
@@ -55,6 +57,12 @@ export const recommendationReducer = (
       return {
         ...previousState,
         visible: true,
+      }
+    case RECOMMENDATIONS_REFRESH:
+      return {
+        ...previousState,
+        refreshCounter: previousState.refreshCounter + 1,
+        loading: true,
       }
     default:
       return previousState

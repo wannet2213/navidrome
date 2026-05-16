@@ -8,6 +8,8 @@ import {
   PLAYER_PLAY_NEXT,
   PLAYER_PLAY_TRACKS,
   PLAYER_SET_TRACK,
+  PLAYER_PLAY_FROM_QUEUE,
+  PLAYER_PLAY_NOW,
   PLAYER_SET_VOLUME,
   PLAYER_SYNC_QUEUE,
   PLAYER_SET_MODE,
@@ -152,7 +154,7 @@ const reducePlayNext = (state, { data }) => {
   return {
     ...state,
     queue: newQueue,
-    clear: true,
+    clear: false,
   }
 }
 
@@ -178,6 +180,45 @@ const reduceSyncQueue = (state, { data: { audioInfo, audioLists } }) => {
     queue: audioLists,
     clear: hasPendingSwitch ? state.clear : false,
     playIndex: hasPendingSwitch ? state.playIndex : undefined,
+  }
+}
+
+const reducePlayFromQueue = (state, { data }) => {
+  const targetUuid = data
+  const index = state.queue.findIndex((item) => item.uuid === targetUuid)
+  if (index === -1) return state
+  return {
+    ...state,
+    playIndex: index,
+    clear: false,
+  }
+}
+
+const reducePlayNow = (state, { data }) => {
+  const { data: songData } = data
+  const newTracks = Object.keys(songData).map((id) => mapToAudioLists(songData[id]))
+  const newQueue = []
+  const current = state.current || {}
+  let insertIndex = -1
+
+  state.queue.forEach((item, idx) => {
+    newQueue.push(item)
+    if (item.uuid === current.uuid) {
+      insertIndex = idx + 1
+      newQueue.push(...newTracks)
+    }
+  })
+
+  if (insertIndex === -1) {
+    newQueue.push(...newTracks)
+    insertIndex = newQueue.length - newTracks.length
+  }
+
+  return {
+    ...state,
+    queue: newQueue,
+    playIndex: insertIndex,
+    clear: true,
   }
 }
 
@@ -217,6 +258,10 @@ export const playerReducer = (previousState = initialState, payload) => {
       return reducePlayTracks(previousState, payload)
     case PLAYER_SET_TRACK:
       return reduceSetTrack(previousState, payload)
+    case PLAYER_PLAY_FROM_QUEUE:
+      return reducePlayFromQueue(previousState, payload)
+    case PLAYER_PLAY_NOW:
+      return reducePlayNow(previousState, payload)
     case PLAYER_ADD_TRACKS:
       return reduceAddTracks(previousState, payload)
     case PLAYER_PLAY_NEXT:

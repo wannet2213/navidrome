@@ -22,9 +22,11 @@ const useStyles = makeStyles(
   (theme) => ({
     root: {
       color: theme.palette.text.secondary,
+      transition: 'color 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
     },
     active: {
-      color: theme.palette.text.primary,
+      color: 'rgba(255, 255, 255, 0.95)',
+      fontWeight: 600,
     },
     icon: { minWidth: theme.spacing(5) },
   }),
