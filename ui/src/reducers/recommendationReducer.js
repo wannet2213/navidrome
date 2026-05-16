@@ -6,6 +6,8 @@ import {
   RECOMMENDATIONS_HIDE,
   RECOMMENDATIONS_SHOW,
   RECOMMENDATIONS_REFRESH,
+  RECOMMENDATIONS_CONSUME,
+  RECOMMENDATIONS_APPEND,
 } from '../actions/recommendations'
 
 const initialState = {
@@ -64,6 +66,20 @@ export const recommendationReducer = (
         refreshCounter: previousState.refreshCounter + 1,
         loading: true,
       }
+    case RECOMMENDATIONS_CONSUME:
+      return {
+        ...previousState,
+        songs: previousState.songs.filter((s) => s.id !== data.songId),
+      }
+    case RECOMMENDATIONS_APPEND: {
+      const existingIds = new Set(previousState.songs.map((s) => s.id))
+      const newSongs = data.songs.filter((s) => !existingIds.has(s.id))
+      return {
+        ...previousState,
+        songs: [...previousState.songs, ...newSongs],
+        loading: false,
+      }
+    }
     default:
       return previousState
   }

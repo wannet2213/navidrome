@@ -27,6 +27,7 @@ import {
   setVolume,
   syncQueue,
 } from '../actions'
+import { consumeRecommendation } from '../actions/recommendations'
 import PlayerToolbar from './PlayerToolbar'
 import { sendNotification } from '../utils'
 import {
@@ -501,6 +502,7 @@ const Player = () => {
       e.stopPropagation()
       e.stopImmediatePropagation()
       dispatch(playNow({ [nextSong.id]: nextSong }, [nextSong.id]))
+      dispatch(consumeRecommendation(nextSong.id))
     }
     document.addEventListener('click', interceptNextButton, true)
     return () =>

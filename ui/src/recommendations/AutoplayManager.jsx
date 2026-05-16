@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { playNow } from '../actions'
+import { consumeRecommendation } from '../actions/recommendations'
 
 const AutoplayManager = () => {
   const dispatch = useDispatch()
@@ -37,6 +38,7 @@ const AutoplayManager = () => {
 
     isPlayingAutoplayRef.current = true
     dispatch(playNow({ [nextSong.id]: nextSong }, [nextSong.id]))
+    dispatch(consumeRecommendation(nextSong.id))
     setTimeout(() => {
       isPlayingAutoplayRef.current = false
     }, 1500)

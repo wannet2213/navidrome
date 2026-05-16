@@ -19,6 +19,7 @@ import {
   hideRecommendations,
   setAutoplayRecommendations,
   refreshRecommendations,
+  consumeRecommendation,
 } from '../actions/recommendations'
 import subsonic from '../subsonic'
 
@@ -570,7 +571,7 @@ const UnifiedPlayerPanel = () => {
 
   const filteredRecommendations = useMemo(() => {
     if (!songs) return []
-    return songs.filter((song) => !queueSet.has(song.id))
+    return songs.filter((song) => !queueSet.has(song.id)).slice(0, 7)
   }, [songs, queueSet])
 
   useEffect(() => {
@@ -621,6 +622,7 @@ const UnifiedPlayerPanel = () => {
       isProcessingRef.current = true
       const data = { [song.id]: song }
       dispatch(playNow(data, [song.id]))
+      dispatch(consumeRecommendation(song.id))
       setTimeout(() => {
         isProcessingRef.current = false
       }, 600)

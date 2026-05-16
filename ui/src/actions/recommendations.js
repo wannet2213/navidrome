@@ -5,6 +5,8 @@ export const RECOMMENDATIONS_SET_LOADING = 'RECOMMENDATIONS_SET_LOADING'
 export const RECOMMENDATIONS_HIDE = 'RECOMMENDATIONS_HIDE'
 export const RECOMMENDATIONS_SHOW = 'RECOMMENDATIONS_SHOW'
 export const RECOMMENDATIONS_REFRESH = 'RECOMMENDATIONS_REFRESH'
+export const RECOMMENDATIONS_CONSUME = 'RECOMMENDATIONS_CONSUME'
+export const RECOMMENDATIONS_APPEND = 'RECOMMENDATIONS_APPEND'
 
 export const loadRecommendations = (songs, sourceTrackId) => ({
   type: RECOMMENDATIONS_LOAD,
@@ -35,4 +37,14 @@ export const showRecommendations = () => ({
 
 export const refreshRecommendations = () => ({
   type: RECOMMENDATIONS_REFRESH,
+})
+
+export const consumeRecommendation = (songId) => ({
+  type: RECOMMENDATIONS_CONSUME,
+  data: { songId },
+})
+
+export const appendRecommendations = (songs) => ({
+  type: RECOMMENDATIONS_APPEND,
+  data: { songs },
 })
