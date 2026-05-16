@@ -223,7 +223,8 @@ const useStyles = makeStyles((theme) => ({
   divider: {
     height: 1,
     margin: '4px 16px 0 16px',
-    background: 'linear-gradient(to right, transparent, rgba(252, 60, 68, 0.3), rgba(255, 255, 255, 0.08), transparent)',
+    background:
+      'linear-gradient(to right, transparent, rgba(252, 60, 68, 0.3), rgba(255, 255, 255, 0.08), transparent)',
     flexShrink: 0,
   },
   songItem: {
@@ -380,10 +381,12 @@ const QueueItem = ({ item, index, isPlaying }) => {
     [dispatch, song],
   )
 
-  const coverUrl = item.cover || subsonic.getCoverArtUrl(
-    { id: song.id, updatedAt: song.updatedAt, album: song.album },
-    80,
-  )
+  const coverUrl =
+    item.cover ||
+    subsonic.getCoverArtUrl(
+      { id: song.id, updatedAt: song.updatedAt, album: song.album },
+      80,
+    )
 
   return (
     <div
@@ -395,9 +398,18 @@ const QueueItem = ({ item, index, isPlaying }) => {
       >
         {isPlaying ? (
           <span className={classes.nowPlayingBars}>
-            <span className={classes.nowPlayingBar} style={{ animationDelay: '0s' }} />
-            <span className={classes.nowPlayingBar} style={{ animationDelay: '0.2s' }} />
-            <span className={classes.nowPlayingBar} style={{ animationDelay: '0.4s' }} />
+            <span
+              className={classes.nowPlayingBar}
+              style={{ animationDelay: '0s' }}
+            />
+            <span
+              className={classes.nowPlayingBar}
+              style={{ animationDelay: '0.2s' }}
+            />
+            <span
+              className={classes.nowPlayingBar}
+              style={{ animationDelay: '0.4s' }}
+            />
           </span>
         ) : (
           index + 1
@@ -410,7 +422,9 @@ const QueueItem = ({ item, index, isPlaying }) => {
         loading="lazy"
       />
       <div className={classes.songInfo}>
-        <div className={`${classes.songTitle} ${isPlaying ? classes.songTitlePlaying : ''}`}>
+        <div
+          className={`${classes.songTitle} ${isPlaying ? classes.songTitlePlaying : ''}`}
+        >
           {song.title}
         </div>
         <div className={classes.songArtist}>
@@ -420,8 +434,15 @@ const QueueItem = ({ item, index, isPlaying }) => {
       </div>
       {!isPlaying && (
         <div className={classes.songActions}>
-          <Tooltip title={translate('resources.song.actions.playNext')} enterDelay={400}>
-            <IconButton size="small" className={classes.playNextButton} onClick={handlePlayNext}>
+          <Tooltip
+            title={translate('resources.song.actions.playNext')}
+            enterDelay={400}
+          >
+            <IconButton
+              size="small"
+              className={classes.playNextButton}
+              onClick={handlePlayNext}
+            >
               <MdSkipNext size={16} />
             </IconButton>
           </Tooltip>
@@ -490,13 +511,27 @@ const RecommendationItem = ({ song, index, onPlay }) => {
         </div>
       </div>
       <div className={classes.songActions}>
-        <Tooltip title={translate('resources.song.actions.playNext')} enterDelay={400}>
-          <IconButton size="small" className={classes.playNextButton} onClick={handlePlayNext}>
+        <Tooltip
+          title={translate('resources.song.actions.playNext')}
+          enterDelay={400}
+        >
+          <IconButton
+            size="small"
+            className={classes.playNextButton}
+            onClick={handlePlayNext}
+          >
             <MdSkipNext size={16} />
           </IconButton>
         </Tooltip>
-        <Tooltip title={translate('resources.song.actions.addToQueue')} enterDelay={400}>
-          <IconButton size="small" className={classes.actionButton} onClick={handleAddToQueue}>
+        <Tooltip
+          title={translate('resources.song.actions.addToQueue')}
+          enterDelay={400}
+        >
+          <IconButton
+            size="small"
+            className={classes.actionButton}
+            onClick={handleAddToQueue}
+          >
             <MdQueue size={15} />
           </IconButton>
         </Tooltip>
@@ -541,7 +576,9 @@ const UnifiedPlayerPanel = () => {
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (panelRef.current && !panelRef.current.contains(event.target)) {
-        const playerEl = document.querySelector('.react-jinke-music-player-main')
+        const playerEl = document.querySelector(
+          '.react-jinke-music-player-main',
+        )
         if (playerEl && playerEl.contains(event.target)) return
         dispatch(hideRecommendations())
       }
@@ -607,7 +644,11 @@ const UnifiedPlayerPanel = () => {
             <span className={classes.headerBadge}>{queue.length} songs</span>
           </div>
           <div>
-            <IconButton size="small" className={classes.iconButton} onClick={handleClose}>
+            <IconButton
+              size="small"
+              className={classes.iconButton}
+              onClick={handleClose}
+            >
               <MdClose size={18} />
             </IconButton>
           </div>
@@ -635,14 +676,20 @@ const UnifiedPlayerPanel = () => {
             </div>
           </div>
           {filteredRecommendations.length > 0 && (
-            <div className={classes.addAllButton} onClick={handleAddAllRecommendations}>
+            <div
+              className={classes.addAllButton}
+              onClick={handleAddAllRecommendations}
+            >
               <MdQueue size={12} />
               Add All
             </div>
           )}
           <Tooltip title="Refresh recommendations" enterDelay={400}>
             <div className={classes.refreshButton} onClick={handleRefresh}>
-              <MdRefresh size={14} className={loading ? classes.refreshSpin : ''} />
+              <MdRefresh
+                size={14}
+                className={loading ? classes.refreshSpin : ''}
+              />
             </div>
           </Tooltip>
         </div>
@@ -651,7 +698,9 @@ const UnifiedPlayerPanel = () => {
           {queue.length === 0 ? (
             <div className={classes.emptyState}>
               <MdQueue className={classes.emptyIcon} />
-              <Typography className={classes.emptyText}>Queue is empty</Typography>
+              <Typography className={classes.emptyText}>
+                Queue is empty
+              </Typography>
             </div>
           ) : (
             queue.map((item, idx) => {
@@ -675,20 +724,32 @@ const UnifiedPlayerPanel = () => {
               <div className={classes.sectionLabel}>
                 <MdMusicNote size={12} />
                 Up Next — Autoplay
-                <span style={{ color: 'rgba(255,255,255,0.2)', fontWeight: 500 }}>
+                <span
+                  style={{ color: 'rgba(255,255,255,0.2)', fontWeight: 500 }}
+                >
                   ({filteredRecommendations.length})
                 </span>
               </div>
               {filteredRecommendations.map((song, idx) => (
-                <RecommendationItem key={song.id || idx} song={song} index={idx} onPlay={handleRecommendationPlay} />
+                <RecommendationItem
+                  key={song.id || idx}
+                  song={song}
+                  index={idx}
+                  onPlay={handleRecommendationPlay}
+                />
               ))}
             </>
           )}
 
           {loading && (
             <div className={classes.emptyState}>
-              <MdMusicNote className={classes.emptyIcon} style={{ animation: 'spin 2s linear infinite' }} />
-              <Typography className={classes.emptyText}>Finding similar songs...</Typography>
+              <MdMusicNote
+                className={classes.emptyIcon}
+                style={{ animation: 'spin 2s linear infinite' }}
+              />
+              <Typography className={classes.emptyText}>
+                Finding similar songs...
+              </Typography>
             </div>
           )}
         </div>

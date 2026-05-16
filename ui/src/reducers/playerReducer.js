@@ -196,7 +196,9 @@ const reducePlayFromQueue = (state, { data }) => {
 
 const reducePlayNow = (state, { data }) => {
   const { data: songData } = data
-  const newTracks = Object.keys(songData).map((id) => mapToAudioLists(songData[id]))
+  const newTracks = Object.keys(songData).map((id) =>
+    mapToAudioLists(songData[id]),
+  )
   const newQueue = []
   const current = state.current || {}
   let insertIndex = -1

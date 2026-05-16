@@ -90,7 +90,9 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '0.625rem',
     fontWeight: 700,
     color: (props) =>
-      props.autoplay ? theme.palette.primary.main : theme.palette.text.secondary,
+      props.autoplay
+        ? theme.palette.primary.main
+        : theme.palette.text.secondary,
     textTransform: 'uppercase',
     letterSpacing: '0.05em',
   },
@@ -302,7 +304,10 @@ const RecommendationItem = ({ song, index }) => {
         </div>
       </div>
       <div className={classes.songActions}>
-        <Tooltip title={translate('resources.song.actions.playNext')} enterDelay={400}>
+        <Tooltip
+          title={translate('resources.song.actions.playNext')}
+          enterDelay={400}
+        >
           <IconButton
             size="small"
             className={classes.playNextButton}
@@ -311,7 +316,10 @@ const RecommendationItem = ({ song, index }) => {
             <MdSkipNext size={16} />
           </IconButton>
         </Tooltip>
-        <Tooltip title={translate('resources.song.actions.addToQueue')} enterDelay={400}>
+        <Tooltip
+          title={translate('resources.song.actions.addToQueue')}
+          enterDelay={400}
+        >
           <IconButton
             size="small"
             className={classes.actionButton}
@@ -348,8 +356,7 @@ const SimilarSongsPanel = () => {
     }
     if (visible) {
       document.addEventListener('mousedown', handleClickOutside)
-      return () =>
-        document.removeEventListener('mousedown', handleClickOutside)
+      return () => document.removeEventListener('mousedown', handleClickOutside)
     }
   }, [visible, dispatch])
 

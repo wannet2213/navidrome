@@ -32,7 +32,8 @@ const useStyles = makeStyles(
         padding: '1.5em',
         minWidth: '32em',
       },
-      background: 'linear-gradient(180deg, rgba(38, 38, 38, 0.5) 0%, transparent 100%)',
+      background:
+        'linear-gradient(180deg, rgba(38, 38, 38, 0.5) 0%, transparent 100%)',
       borderRadius: 0,
       boxShadow: 'none',
     },

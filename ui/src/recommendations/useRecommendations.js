@@ -112,7 +112,9 @@ const validateSong = (song) => {
 const useRecommendations = () => {
   const dispatch = useDispatch()
   const currentTrack = useSelector((state) => state.player.current)
-  const refreshCounter = useSelector((state) => state.recommendations?.refreshCounter || 0)
+  const refreshCounter = useSelector(
+    (state) => state.recommendations?.refreshCounter || 0,
+  )
   const prevTrackIdRef = useRef(null)
   const fetchTimeoutRef = useRef(null)
   const currentSongRef = useRef(null)
@@ -129,7 +131,10 @@ const useRecommendations = () => {
       let songs = []
 
       try {
-        const response = await subsonic.getSimilarSongs2(songId, SIMILAR_SONGS_COUNT)
+        const response = await subsonic.getSimilarSongs2(
+          songId,
+          SIMILAR_SONGS_COUNT,
+        )
         const data = unwrap(response)
         songs = data.similarSongs2?.song || []
       } catch (e) {
@@ -138,7 +143,10 @@ const useRecommendations = () => {
 
       if (songs.length < MIN_RECOMMENDATIONS && song?.artist) {
         try {
-          const topResponse = await subsonic.getTopSongs(song.artist, TOP_SONGS_COUNT)
+          const topResponse = await subsonic.getTopSongs(
+            song.artist,
+            TOP_SONGS_COUNT,
+          )
           const topData = unwrap(topResponse)
           const topSongs = topData.topSongs?.song || []
           songs = [...songs, ...topSongs]
@@ -150,13 +158,19 @@ const useRecommendations = () => {
       if (songs.length < MIN_RECOMMENDATIONS) {
         try {
           if (song?.genre) {
-            const response = await subsonic.getRandomSongs(RANDOM_SONGS_COUNT, song.genre)
+            const response = await subsonic.getRandomSongs(
+              RANDOM_SONGS_COUNT,
+              song.genre,
+            )
             const data = unwrap(response)
             const randomSongs = data.randomSongs?.song || []
             songs = [...songs, ...randomSongs]
           }
         } catch (e) {
-          console.warn('[Recommendations] getRandomSongs(genre) failed:', e.message)
+          console.warn(
+            '[Recommendations] getRandomSongs(genre) failed:',
+            e.message,
+          )
         }
       }
 
@@ -176,7 +190,10 @@ const useRecommendations = () => {
           const response = await subsonic.getStarred2()
           const data = unwrap(response)
           const starredSongs = data.starred2?.song || []
-          songs = [...songs, ...shuffleArray(starredSongs).slice(0, RANDOM_SONGS_COUNT)]
+          songs = [
+            ...songs,
+            ...shuffleArray(starredSongs).slice(0, RANDOM_SONGS_COUNT),
+          ]
         } catch (e) {
           console.warn('[Recommendations] getStarred2 failed:', e.message)
         }
@@ -198,7 +215,10 @@ const useRecommendations = () => {
       songs = songs.map(mapReplayGain)
 
       if (songs.length === 0) {
-        console.warn('[Recommendations] No valid recommendations found for', songId)
+        console.warn(
+          '[Recommendations] No valid recommendations found for',
+          songId,
+        )
       }
 
       dispatch(loadRecommendations(songs, songId))
@@ -235,7 +255,11 @@ const useRecommendations = () => {
         clearTimeout(fetchTimeoutRef.current)
       }
     }
-  }, [currentTrack?.trackId, currentTrack?.isRadio, fetchRecommendationsForSong])
+  }, [
+    currentTrack?.trackId,
+    currentTrack?.isRadio,
+    fetchRecommendationsForSong,
+  ])
 
   useEffect(() => {
     if (refreshCounter <= 0) return
@@ -251,7 +275,13 @@ const useRecommendations = () => {
       console.error('[Recommendations] Refresh failed:', err)
       dispatch(loadRecommendations([], trackId))
     })
-  }, [refreshCounter, currentTrack?.trackId, currentTrack?.song, fetchRecommendationsForSong, dispatch])
+  }, [
+    refreshCounter,
+    currentTrack?.trackId,
+    currentTrack?.song,
+    fetchRecommendationsForSong,
+    dispatch,
+  ])
 
   return {
     fetchRecommendations: fetchRecommendationsForSong,

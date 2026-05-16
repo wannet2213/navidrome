@@ -58,8 +58,9 @@ const useStyle = makeStyles(
         {
           borderRadius: (props) => (!props.enableCoverAnimation ? '0' : '20px'),
           width: (props) => (!props.enableCoverAnimation ? '85%' : '75%'),
-          maxWidth: (props) => (!props.enableCoverAnimation ? '600px' : '500px'),
-          height: (props) => (!props.enableCoverAnimation && 'auto'),
+          maxWidth: (props) =>
+            !props.enableCoverAnimation ? '600px' : '500px',
+          height: (props) => !props.enableCoverAnimation && 'auto',
           aspectRatio: '1/1',
           display: 'flex',
           boxShadow: '0 16px 48px rgba(0, 0, 0, 0.5)',
@@ -132,9 +133,10 @@ const useStyle = makeStyles(
       '& .music-player-panel .panel-content .progress-bar-content .progress': {
         transition: 'width 0.3s linear',
       },
-      '& .react-jinke-music-player-mobile .react-jinke-music-player-mobile-toggle': {
-        opacity: 0.9,
-      },
+      '& .react-jinke-music-player-mobile .react-jinke-music-player-mobile-toggle':
+        {
+          opacity: 0.9,
+        },
       '& .music-player-panel .panel-content .rc-slider-handle': {
         border: 'none',
         boxShadow: '0 0 0 4px rgba(252, 60, 68, 0.15)',
