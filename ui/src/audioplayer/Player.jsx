@@ -20,6 +20,7 @@ import AudioTitle from './AudioTitle'
 import {
   clearQueue,
   currentPlaying,
+  playNow,
   refreshQueue,
   setPlayMode,
   setTranscodingProfile,
@@ -49,6 +50,7 @@ const Player = () => {
   const recommendationsVisible = useSelector(
     (state) => state.recommendations?.visible,
   )
+  const recommendations = useSelector((state) => state.recommendations)
   const dispatch = useDispatch()
   const [currentTrackId, setCurrentTrackId] = useState(null)
   const [heartbeatTrackId, setHeartbeatTrackId] = useState(null)
@@ -68,6 +70,9 @@ const Player = () => {
   // without re-triggering on every queue/position change
   const playerStateRef = useRef(playerState)
   playerStateRef.current = playerState
+
+  const recommendationsRef = useRef(recommendations)
+  recommendationsRef.current = recommendations
 
   currentTrackIdRef.current = currentTrackId
 
@@ -465,6 +470,42 @@ const Player = () => {
     return () =>
       document.removeEventListener('click', interceptQueueButton, true)
   }, [dispatch, recommendationsVisible])
+
+  useEffect(() => {
+    const interceptNextButton = (e) => {
+      const nextBtn = e.target.closest(
+        '.react-jinke-music-player-main .next-audio',
+      )
+      if (!nextBtn) return
+
+      const state = playerStateRef.current
+      const recs = recommendationsRef.current
+      const queue = state.queue || []
+      const savedIdx = state.savedPlayIndex ?? -1
+      const isLastTrack = savedIdx >= 0 && savedIdx === queue.length - 1
+
+      if (!isLastTrack) return
+      if (!recs?.autoplay) return
+      if (!recs?.songs || recs.songs.length === 0) return
+
+      const queueIdSet = new Set()
+      queue.forEach((item) => {
+        const id = item.trackId || (item.song && item.song.id) || item.id
+        if (id) queueIdSet.add(id)
+      })
+
+      const nextSong = recs.songs.find((s) => !queueIdSet.has(s.id))
+      if (!nextSong) return
+
+      e.preventDefault()
+      e.stopPropagation()
+      e.stopImmediatePropagation()
+      dispatch(playNow({ [nextSong.id]: nextSong }, [nextSong.id]))
+    }
+    document.addEventListener('click', interceptNextButton, true)
+    return () =>
+      document.removeEventListener('click', interceptNextButton, true)
+  }, [dispatch])
 
   return (
     <ThemeProvider theme={createMuiTheme(theme)}>
