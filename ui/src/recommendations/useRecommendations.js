@@ -9,12 +9,11 @@ import {
 
 const POOL_SIZE = 14
 const DISPLAY_LIMIT = 7
-const REFILL_THRESHOLD = 10
 const SIMILAR_SONGS_COUNT = 20
 const TOP_SONGS_COUNT = 15
 const RANDOM_SONGS_COUNT = 15
 const INITIAL_DEBOUNCE_MS = 400
-const REFILL_DEBOUNCE_MS = 200
+const REFILL_DEBOUNCE_MS = 100
 
 const unwrap = (response) => {
   const data = response.json?.['subsonic-response']
@@ -64,49 +63,22 @@ const validateSong = (song) => {
   return true
 }
 
-const scoreSong = (song, currentSong) => {
-  let score = 0
-  if (currentSong) {
-    if (song.genre && currentSong.genre && song.genre === currentSong.genre) {
-      score += 30
-    }
-    if (song.artistId && song.artistId === currentSong.artistId) {
-      score -= 50
-    }
-    if (song.albumId && song.albumId === currentSong.albumId) {
-      score -= 80
-    }
-  }
-  if (song.starred) score += 20
-  if (song.playCount > 0) score += Math.min(song.playCount, 10) * 2
-  if (song.rating && song.rating > 0) score += song.rating * 3
-  return score
-}
-
-const sortByRelevance = (songs, currentSong) => {
-  return [...songs]
-    .map((song) => ({ song, score: scoreSong(song, currentSong) }))
-    .sort((a, b) => b.score - a.score)
-    .map((item) => item.song)
-}
-
-const shuffleTopPortion = (songs) => {
-  if (songs.length <= DISPLAY_LIMIT) return songs
-  const cutoff = Math.floor(songs.length * 0.6)
-  const topPortion = shuffleArray(songs.slice(0, cutoff))
-  const rest = songs.slice(cutoff)
-  return [...topPortion, ...rest]
-}
-
-const processSongs = (songs, songId, currentSong) => {
+const processSongs = (songs, songId) => {
   songs = deduplicateById(songs)
   songs = songs.filter((s) => s.id !== songId)
   songs = songs.filter(validateSong)
-  songs = sortByRelevance(songs, currentSong)
-  songs = shuffleTopPortion(songs)
+  songs = shuffleArray(songs)
   songs = songs.slice(0, POOL_SIZE)
   songs = songs.map(mapReplayGain)
   return songs
+}
+
+const processSongsForRefill = (songs, songId, existingIds) => {
+  songs = songs.filter((s) => s.id !== songId)
+  songs = songs.filter(validateSong)
+  songs = songs.filter((s) => !existingIds.has(s.id))
+  songs = shuffleArray(songs)
+  return songs.map(mapReplayGain)
 }
 
 const fetchSongBatch = async (songId, song) => {
@@ -181,6 +153,9 @@ const useRecommendations = () => {
   const poolLength = useSelector(
     (state) => state.recommendations?.songs?.length || 0,
   )
+  const existingSongIds = useSelector(
+    (state) => new Set((state.recommendations?.songs || []).map((s) => s.id)),
+  )
 
   const prevTrackIdRef = useRef(null)
   const fetchTimeoutRef = useRef(null)
@@ -210,7 +185,7 @@ const useRecommendations = () => {
       dispatch(setRecommendationsLoading(true))
       try {
         const raw = await fetchSongBatch(songId, song)
-        const processed = processSongs(raw, songId, currentSongRef.current)
+        const processed = processSongs(raw, songId)
         dispatch(loadRecommendations(processed, songId))
       } catch {
         dispatch(loadRecommendations([], songId))
@@ -220,13 +195,12 @@ const useRecommendations = () => {
   )
 
   const fetchAndAppend = useCallback(
-    async (songId, song, existingCount) => {
+    async (songId, song, currentExistingIds, needed) => {
       if (!songId || isRefillingRef.current) return
       isRefillingRef.current = true
       try {
         const raw = await fetchSongBatch(songId, song)
-        const needed = POOL_SIZE - existingCount
-        const processed = processSongs(raw, songId, currentSongRef.current)
+        const processed = processSongsForRefill(raw, songId, currentExistingIds)
         dispatch(appendRecommendations(processed.slice(0, needed)))
       } catch {
         // silent
@@ -263,18 +237,19 @@ const useRecommendations = () => {
   }, [refreshCounter, trackIdForRefresh, songForRefresh, fetchAndLoad])
 
   useEffect(() => {
-    if (poolLength === 0 || poolLength >= REFILL_THRESHOLD) return
+    if (poolLength >= POOL_SIZE) return
     if (isRefillingRef.current) return
     if (!trackId) return
     if (refillTimeoutRef.current) clearTimeout(refillTimeoutRef.current)
     const song = currentSong
+    const needed = POOL_SIZE - poolLength
     refillTimeoutRef.current = setTimeout(() => {
-      fetchAndAppend(trackId, song, poolLength)
+      fetchAndAppend(trackId, song, existingSongIds, needed)
     }, REFILL_DEBOUNCE_MS)
     return () => {
       if (refillTimeoutRef.current) clearTimeout(refillTimeoutRef.current)
     }
-  }, [poolLength, trackId, currentSong, fetchAndAppend])
+  }, [poolLength, trackId, currentSong, existingSongIds, fetchAndAppend])
 
   return {
     fetchRecommendations: fetchAndLoad,
