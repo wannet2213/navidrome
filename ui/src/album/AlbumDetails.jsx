@@ -121,7 +121,7 @@ const useStyles = makeStyles(
     recordArtist: {
       fontSize: '1.0625rem',
       fontWeight: 500,
-      color: '#fc3c44',
+      color: theme.palette.primary.main,
       marginTop: 6,
     },
     recordMeta: {

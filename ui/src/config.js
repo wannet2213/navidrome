@@ -17,7 +17,7 @@ const defaultConfig = {
   gaTrackingId: '',
   devActivityPanel: true,
   enableStarRating: true,
-  defaultTheme: 'Modern Minimal',
+  defaultTheme: 'Aero Glass',
   defaultLanguage: '',
   defaultUIVolume: 100,
   uiSearchDebounceMs: 200,

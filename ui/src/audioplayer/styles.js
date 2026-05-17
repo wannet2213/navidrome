@@ -108,11 +108,11 @@ const useStyle = makeStyles(
         transition: 'all 0.15s cubic-bezier(0.4, 0, 0.2, 1)',
         borderLeft: '2px solid transparent',
         '&:hover': {
-          backgroundColor: 'rgba(252, 60, 68, 0.06)',
+          backgroundColor: 'rgba(14, 165, 233, 0.06)',
         },
         '&.playing': {
-          borderLeftColor: '#fc3c44',
-          backgroundColor: 'rgba(252, 60, 68, 0.08)',
+          borderLeftColor: theme.palette.primary.main,
+          backgroundColor: 'rgba(14, 165, 233, 0.08)',
         },
       },
       '& .audio-lists-panel .audio-item .group .player-singer': {
@@ -139,10 +139,10 @@ const useStyle = makeStyles(
         },
       '& .music-player-panel .panel-content .rc-slider-handle': {
         border: 'none',
-        boxShadow: '0 0 0 4px rgba(252, 60, 68, 0.15)',
+        boxShadow: '0 0 0 4px rgba(14, 165, 233, 0.15)',
         transition: 'box-shadow 0.2s ease',
         '&:active': {
-          boxShadow: '0 0 0 6px rgba(252, 60, 68, 0.25)',
+          boxShadow: '0 0 0 6px rgba(14, 165, 233, 0.25)',
         },
       },
       '& .music-player-panel .panel-content .rc-slider-track': {

@@ -83,7 +83,7 @@ describe('useCurrentTheme', () => {
         ),
       })
 
-      expect(result.current.themeName).toMatch('Dark')
+      expect(result.current.themeName).toMatch('Aero Glass')
     })
     it('sets theme as dark', () => {
       const { result } = renderHook(() => useCurrentTheme(), {

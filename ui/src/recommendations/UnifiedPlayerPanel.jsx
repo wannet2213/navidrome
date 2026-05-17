@@ -112,7 +112,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: 8,
     transition: 'background-color 0.15s ease',
     '&:hover': {
-      backgroundColor: 'rgba(252, 60, 68, 0.08)',
+      backgroundColor: 'rgba(14, 165, 233, 0.08)',
     },
   },
   autoplayLabel: {
@@ -122,7 +122,7 @@ const useStyles = makeStyles((theme) => ({
     letterSpacing: '0.04em',
   },
   autoplayLabelOn: {
-    color: '#fc3c44',
+    color: theme.palette.primary.main,
   },
   autoplayLabelOff: {
     color: 'rgba(255, 255, 255, 0.35)',
@@ -136,7 +136,7 @@ const useStyles = makeStyles((theme) => ({
     flexShrink: 0,
   },
   autoplaySwitchOn: {
-    backgroundColor: '#fc3c44',
+    backgroundColor: theme.palette.primary.main,
   },
   autoplaySwitchOff: {
     backgroundColor: 'rgba(115, 115, 115, 0.25)',
@@ -160,7 +160,7 @@ const useStyles = makeStyles((theme) => ({
   addAllButton: {
     fontSize: '0.6875rem',
     fontWeight: 600,
-    color: '#fc3c44',
+    color: theme.palette.primary.main,
     cursor: 'pointer',
     padding: '3px 8px',
     borderRadius: 6,
@@ -169,7 +169,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     gap: 4,
     '&:hover': {
-      backgroundColor: 'rgba(252, 60, 68, 0.1)',
+      backgroundColor: 'rgba(14, 165, 233, 0.1)',
     },
   },
   refreshButton: {
@@ -185,7 +185,7 @@ const useStyles = makeStyles((theme) => ({
     cursor: 'pointer',
     '&:hover': {
       color: 'rgba(255, 255, 255, 0.9)',
-      backgroundColor: 'rgba(252, 60, 68, 0.08)',
+      backgroundColor: 'rgba(14, 165, 233, 0.08)',
     },
   },
   refreshSpin: {
@@ -225,7 +225,7 @@ const useStyles = makeStyles((theme) => ({
     height: 1,
     margin: '4px 16px 0 16px',
     background:
-      'linear-gradient(to right, transparent, rgba(252, 60, 68, 0.3), rgba(255, 255, 255, 0.08), transparent)',
+      'linear-gradient(to right, transparent, rgba(14, 165, 233, 0.3), rgba(255, 255, 255, 0.08), transparent)',
     flexShrink: 0,
   },
   songItem: {
@@ -237,16 +237,16 @@ const useStyles = makeStyles((theme) => ({
     transition: 'all 0.15s cubic-bezier(0.4, 0, 0.2, 1)',
     borderLeft: '2px solid transparent',
     '&:hover': {
-      backgroundColor: 'rgba(252, 60, 68, 0.06)',
-      borderLeftColor: '#fc3c44',
+      backgroundColor: 'rgba(14, 165, 233, 0.06)',
+      borderLeftColor: theme.palette.primary.main,
     },
     '&:hover $songActions': {
       opacity: 1,
     },
   },
   songItemPlaying: {
-    backgroundColor: 'rgba(252, 60, 68, 0.08)',
-    borderLeftColor: '#fc3c44',
+    backgroundColor: 'rgba(14, 165, 233, 0.08)',
+    borderLeftColor: theme.palette.primary.main,
   },
   songIndex: {
     fontSize: '0.6875rem',
@@ -256,7 +256,7 @@ const useStyles = makeStyles((theme) => ({
     flexShrink: 0,
   },
   songIndexPlaying: {
-    color: '#fc3c44',
+    color: theme.palette.primary.main,
   },
   songIndexDefault: {
     color: 'rgba(255, 255, 255, 0.35)',
@@ -270,7 +270,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: 'rgba(115, 115, 115, 0.06)',
   },
   coverArtPlaying: {
-    boxShadow: '0 4px 16px rgba(252, 60, 68, 0.3)',
+    boxShadow: '0 4px 16px rgba(14, 165, 233, 0.3)',
   },
   songInfo: {
     flex: 1,
@@ -286,7 +286,7 @@ const useStyles = makeStyles((theme) => ({
     lineHeight: 1.4,
   },
   songTitlePlaying: {
-    color: '#fc3c44',
+    color: theme.palette.primary.main,
     fontWeight: 600,
   },
   songArtist: {
@@ -312,15 +312,15 @@ const useStyles = makeStyles((theme) => ({
     transition: 'all 0.15s ease',
     '&:hover': {
       color: 'rgba(255, 255, 255, 0.95)',
-      backgroundColor: 'rgba(252, 60, 68, 0.08)',
+      backgroundColor: 'rgba(14, 165, 233, 0.08)',
     },
   },
   playNextButton: {
     padding: 4,
-    color: '#fc3c44',
+    color: theme.palette.primary.main,
     borderRadius: 6,
     '&:hover': {
-      backgroundColor: 'rgba(252, 60, 68, 0.12)',
+      backgroundColor: 'rgba(14, 165, 233, 0.12)',
     },
   },
   emptyState: {
@@ -348,7 +348,7 @@ const useStyles = makeStyles((theme) => ({
   },
   nowPlayingBar: {
     width: 3,
-    backgroundColor: '#fc3c44',
+    backgroundColor: theme.palette.primary.main,
     borderRadius: 1,
     animation: '$barPulse 1.2s ease-in-out infinite',
   },

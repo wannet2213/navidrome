@@ -67,8 +67,8 @@ const useStyles = makeStyles((theme) => ({
   headerBadge: {
     fontSize: '0.625rem',
     fontWeight: 700,
-    color: '#fc3c44',
-    backgroundColor: 'rgba(252, 60, 68, 0.12)',
+    color: theme.palette.primary.main,
+    backgroundColor: 'rgba(14, 165, 233, 0.12)',
     padding: '2px 8px',
     borderRadius: 6,
     textTransform: 'uppercase',
@@ -83,7 +83,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: 8,
     transition: 'background-color 0.15s ease',
     '&:hover': {
-      backgroundColor: 'rgba(252, 60, 68, 0.08)',
+      backgroundColor: 'rgba(14, 165, 233, 0.08)',
     },
   },
   autoplayLabel: {
@@ -101,7 +101,7 @@ const useStyles = makeStyles((theme) => ({
     height: 16,
     borderRadius: 8,
     backgroundColor: (props) =>
-      props.autoplay ? '#fc3c44' : 'rgba(115, 115, 115, 0.2)',
+      props.autoplay ? theme.palette.primary.main : 'rgba(115, 115, 115, 0.2)',
     position: 'relative',
     transition: 'background-color 0.2s ease',
     flexShrink: 0,
@@ -156,8 +156,8 @@ const useStyles = makeStyles((theme) => ({
     transition: 'background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1)',
     borderLeft: '2px solid transparent',
     '&:hover': {
-      backgroundColor: 'rgba(252, 60, 68, 0.06)',
-      borderLeftColor: '#fc3c44',
+      backgroundColor: 'rgba(14, 165, 233, 0.06)',
+      borderLeftColor: theme.palette.primary.main,
     },
     '&:hover $songActions': {
       opacity: 1,
@@ -214,15 +214,15 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: 6,
     '&:hover': {
       color: 'rgba(255, 255, 255, 0.95)',
-      backgroundColor: 'rgba(252, 60, 68, 0.08)',
+      backgroundColor: 'rgba(14, 165, 233, 0.08)',
     },
   },
   playNextButton: {
     padding: 4,
-    color: '#fc3c44',
+    color: theme.palette.primary.main,
     borderRadius: 6,
     '&:hover': {
-      backgroundColor: 'rgba(252, 60, 68, 0.12)',
+      backgroundColor: 'rgba(14, 165, 233, 0.12)',
     },
   },
   emptyState: {

@@ -7,6 +7,7 @@ const AutoplayManager = () => {
   const dispatch = useDispatch()
   const playerQueue = useSelector((state) => state.player.queue)
   const playerCurrent = useSelector((state) => state.player.current)
+  const playerMode = useSelector((state) => state.player.mode)
   const recommendations = useSelector((state) => state.recommendations)
 
   const prevCurrentUuidRef = useRef(null)
@@ -21,9 +22,17 @@ const AutoplayManager = () => {
     const prevUuid = prevCurrentUuidRef.current
     prevCurrentUuidRef.current = currentUuid
 
+    // Only act when a track just ended (had uuid, now doesn't)
     if (!prevUuid || currentUuid) return
     if (!autoplay) return
     if (isPlayingAutoplayRef.current) return
+
+    // Respect the play mode:
+    // - 'orderLoop' (repeat all): player loops to first track — don't interfere
+    // - 'singleLoop' (repeat one): player replays same track — don't interfere
+    // - 'shufflePlay' (shuffle): player picks random next — don't interfere
+    // - 'order' (in order, stop at end): queue ended naturally — OK to autoplay
+    if (playerMode && playerMode !== 'order') return
 
     if (!songs || songs.length === 0) return
 
@@ -42,7 +51,7 @@ const AutoplayManager = () => {
     setTimeout(() => {
       isPlayingAutoplayRef.current = false
     }, 1500)
-  }, [current, autoplay, songs, queue, dispatch])
+  }, [current, autoplay, songs, queue, dispatch, playerMode])
 
   useEffect(() => {
     if (queue.length === 0) {

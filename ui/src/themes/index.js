@@ -1,3 +1,4 @@
+import AeroGlassTheme from './aeroGlass'
 import LightTheme from './light'
 import DarkTheme from './dark'
 import ExtraDarkTheme from './extradark'
@@ -23,6 +24,7 @@ export default {
   DarkTheme,
 
   // New themes should be added here, in alphabetic order
+  AeroGlassTheme,
   AmusicTheme,
   CatppuccinMacchiatoTheme,
   DraculaTheme,

@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
     width: 55,
   },
   active: {
-    color: '#fc3c44',
+    color: theme.palette.primary.main,
     fontWeight: 700,
   },
 }))

@@ -489,6 +489,12 @@ const Player = () => {
       if (!recs?.autoplay) return
       if (!recs?.songs || recs.songs.length === 0) return
 
+      // Respect the play mode — only inject recommendations in 'order' mode.
+      // In 'orderLoop' (repeat all), 'singleLoop' (repeat one), or
+      // 'shufflePlay' (shuffle), the music player handles transitions itself.
+      const mode = state.mode
+      if (mode && mode !== 'order') return
+
       const queueIdSet = new Set()
       queue.forEach((item) => {
         const id = item.trackId || (item.song && item.song.id) || item.id
