@@ -262,7 +262,7 @@ export const playerReducer = (previousState = initialState, payload) => {
   const { type } = payload
   switch (type) {
     case PLAYER_CLEAR_QUEUE:
-      return reduceClearQueue()
+      return reduceClearQueue(previousState)
     case PLAYER_PLAY_TRACKS:
       return reducePlayTracks(previousState, payload)
     case PLAYER_SET_TRACK:
