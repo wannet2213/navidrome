@@ -23,6 +23,7 @@ DOCKER_TAG ?= deluan/navidrome:develop
 GOLANGCI_LINT_VERSION ?= v2.12.0
 
 UI_SRC_FILES := $(shell find ui -type f -not -path "ui/build/*" -not -path "ui/node_modules/*")
+CLIENT_SRC_FILES := $(shell find client/src client/public client/electron -type f -not -path "client/dist/*" -not -path "client/node_modules/*")
 
 setup: check_env download-deps install-golangci-lint setup-git ##@1_Run_First Install dependencies and prepare development environment
 	@echo Downloading Node dependencies...
@@ -154,8 +155,11 @@ debug-build: check_go_env buildjs ##@Build Build the project (with remote debug 
 	go build -gcflags="all=-N -l" -ldflags="-X github.com/navidrome/navidrome/consts.gitSha=$(GIT_SHA) -X github.com/navidrome/navidrome/consts.gitTag=$(GIT_TAG)" -tags=$(GO_BUILD_TAGS)
 .PHONY: debug-build
 
-buildjs: check_node_env ui/build/index.html ##@Build Build only frontend
+buildjs: check_node_env ui/build/index.html client/dist/index.html ##@Build Build only frontend
 .PHONY: buildjs
+
+buildclientjs: check_node_env client/dist/index.html ##@Build Build only modern client frontend
+.PHONY: buildclientjs
 
 docker-buildjs: ##@Build Build only frontend using Docker
 	docker build --output "./ui" --target ui-bundle .
@@ -163,6 +167,11 @@ docker-buildjs: ##@Build Build only frontend using Docker
 
 ui/build/index.html: $(UI_SRC_FILES)
 	@(cd ./ui && npm run build)
+
+client/dist/index.html: $(CLIENT_SRC_FILES)
+	@echo "Building modern client UI (Aonsoku)..."
+	@(cd ./client && npx pnpm install --ignore-scripts 2>/dev/null || npx pnpm install --ignore-scripts)
+	@(cd ./client && npx pnpm run build)
 
 docker-platforms: ##@Cross_Compilation List supported platforms
 	@echo "Supported platforms:"

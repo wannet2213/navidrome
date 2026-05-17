@@ -78,6 +78,105 @@ Here are some useful direct links:
 - [Development](https://www.navidrome.org/docs/developers/)
 - [Subsonic API Compatibility](https://www.navidrome.org/docs/developers/subsonic-api/)
 
+## Build & Run (Development)
+
+Navidrome now includes a modern [Aonsoku](https://github.com/victoralvesf/aonsoku) client UI alongside the original admin UI.
+
+### Prerequisites
+
+- **Go** 1.26+
+- **Node.js** (LTS)
+- **pnpm** (for client UI)
+
+### Quick Start
+
+```bash
+# Install dependencies (first time only)
+make setup
+
+# Run in development mode with hot-reload
+make dev
+```
+
+Open your browser:
+- **Admin UI**: `http://localhost:4533/app/`
+- **Modern Client (Aonsoku)**: `http://localhost:4533/client/`
+
+### Build
+
+```bash
+# Full build: Go binary + both UIs
+make build
+
+# Run the built binary
+./navidrome
+```
+
+Build individual components:
+
+```bash
+# Build admin UI only
+make buildjs
+
+# Build modern client UI only
+make buildclientjs
+
+# Build backend with debug symbols
+make debug-build
+```
+
+### Backend-only Development
+
+```bash
+# Start Go server with auto-reload (requires pre-built UIs)
+make server
+```
+
+### Docker
+
+```bash
+# Build image (includes both UIs)
+docker build -t navidrome .
+
+# Run container
+docker run -p 4533:4533 -v /path/to/music:/music navidrome
+```
+
+### Tests
+
+```bash
+# Run Go tests
+make test
+
+# Run Go tests with race detector
+make test-race
+
+# Run JS tests (admin UI)
+make test-js
+
+# Run all tests
+make testall
+```
+
+### Other Commands
+
+```bash
+# Lint Go code
+make lint
+
+# Lint Go + JS code
+make lintall
+
+# Format code
+make format
+
+# Update dependency injection
+make wire
+
+# Run code generation
+make gen
+```
+
 ## Screenshots
 
 <p align="left">

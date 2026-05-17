@@ -42,6 +42,23 @@ FROM scratch AS ui-bundle
 COPY --from=ui /build /build
 
 ########################################################################################################################
+### Build Modern Client UI (Aonsoku)
+FROM --platform=$BUILDPLATFORM public.ecr.aws/docker/library/node:lts-alpine AS client-ui
+WORKDIR /app
+
+# Install pnpm and node dependencies
+RUN npm install -g pnpm
+COPY client/package.json client/pnpm-lock.yaml ./
+RUN pnpm install --ignore-scripts
+
+# Build client bundle
+COPY client/ ./
+RUN pnpm run build
+
+FROM scratch AS client-bundle
+COPY --from=client-ui /app/dist /client
+
+########################################################################################################################
 ### Build Navidrome binary for Docker image (dynamic musl, enables native libwebp via dlopen)
 FROM --platform=$BUILDPLATFORM public.ecr.aws/docker/library/golang:1.26-alpine AS build-alpine
 COPY --from=xx / /
@@ -64,6 +81,7 @@ ARG GIT_TAG
 
 RUN --mount=type=bind,source=. \
     --mount=from=ui,source=/build,target=./ui/build,ro \
+    --mount=from=client-ui,source=/app/dist,target=./client/dist,ro \
     --mount=type=cache,target=/root/.cache \
     --mount=type=cache,target=/go/pkg/mod <<EOT
     set -e
@@ -105,6 +123,7 @@ ARG GIT_TAG
 
 RUN --mount=type=bind,source=. \
     --mount=from=ui,source=/build,target=./ui/build,ro \
+    --mount=from=client-ui,source=/app/dist,target=./client/dist,ro \
     --mount=from=osxcross,src=/osxcross/SDK,target=/xx-sdk,ro \
     --mount=type=cache,target=/root/.cache \
     --mount=type=cache,target=/go/pkg/mod <<EOT

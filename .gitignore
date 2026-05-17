@@ -19,6 +19,8 @@ cache/*
 *.swp
 coverage.out
 dist
+client/dist/
+client/node_modules/
 music
 music.old
 *.db*

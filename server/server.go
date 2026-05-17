@@ -18,6 +18,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/httprate"
+	"github.com/navidrome/navidrome/client"
 	"github.com/navidrome/navidrome/conf"
 	"github.com/navidrome/navidrome/consts"
 	"github.com/navidrome/navidrome/core/auth"
@@ -60,6 +61,9 @@ func (s *Server) MountRouter(description, urlPath string, subRouter http.Handler
 func (s *Server) Run(ctx context.Context, addr string, port int, tlsCert string, tlsKey string) error {
 	// Mount the router for the frontend assets
 	s.MountRouter("WebUI", consts.URLPathUI, s.frontendAssetsHandler())
+
+	// Mount the modern client UI (Aonsoku)
+	s.MountRouter("ClientUI", consts.URLPathClientUI, s.clientAssetsHandler())
 
 	// Create a new http.Server with the specified read header timeout and handler
 	server := &http.Server{
@@ -237,6 +241,16 @@ func (s *Server) frontendAssetsHandler() http.Handler {
 
 	r.Handle("/", Index(s.ds, ui.BuildAssets()))
 	r.Handle("/*", http.StripPrefix(s.appRoot, http.FileServer(http.FS(ui.BuildAssets()))))
+	return r
+}
+
+func (s *Server) clientAssetsHandler() http.Handler {
+	r := chi.NewRouter()
+	clientFS := client.BuildAssets()
+	clientRoot := path.Join(conf.Server.BasePath, consts.URLPathClientUI)
+
+	r.Handle("/", ClientIndex(clientFS))
+	r.Handle("/*", http.StripPrefix(clientRoot, http.FileServer(http.FS(clientFS))))
 	return r
 }
 
